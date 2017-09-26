@@ -24,6 +24,7 @@ public class AnimationEntity extends GameEntity implements Drawable{
 
 	public AnimationEntity(byte[] bytes) {
 		super(bytes);
+		this.createFromBytes(bytes);
 	}
 	
 	public boolean play() {
@@ -50,7 +51,7 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	}
 
 	@Override
-	public boolean createFromBytes(byte[] bytes) {
+	public void createFromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
+import asgardengine.utility.binary.ByteUtilities;
+import asgardengine.utility.logging.LoggingHandler;
 
 public class Animation extends GameClass {
 	// just a blueprint, the actual playing methods are implemented via an instance class
 
+	public static final byte[] TYPE = {0, 2};
+	
 	private ArrayList<AnimSprite> sprites = new ArrayList<AnimSprite>(); // all sprites making the animation in the correct order
 	private boolean isLoop = false; // does the animation loop indefinitely or does it play just once
 	private long playbackLength = 0; // the length of this animation
@@ -222,14 +226,48 @@ public class Animation extends GameClass {
 	
 	@Override
 	public byte[] toBytes() {
-		// TODO Auto-generated method stub
-		return null;
+		byte[][] bytes = new byte[9+this.sprites.size()][];
+		bytes[0] = ByteUtilities.integerToByte(this.getType().length); // first: length of the type array
+		bytes[1] = this.getType(); // second: type array
+		if (this.getClassID() != null) {
+			bytes[3] = this.getClassID().toByte(); // fourth: class ID
+			bytes[2] = ByteUtilities.integerToByte(bytes[3].length); // third: length of the class ID
+		} else { // set the length to a negative value if the file is null
+			bytes[2] = ByteUtilities.integerToByte(-1);
+			LoggingHandler.getLog().warning("The ClassID of " + this + " is invalid.");
+		}
+		if (this.getDescriptiveName() != null) {
+			bytes[5] = this.getDescriptiveName().getBytes(); // sixth: descriptive
+			bytes[4] = ByteUtilities.integerToByte(bytes[5].length); // fifth: length of the descriptive
+		} else { // set the length to a negative value if the descriptive is null
+			bytes[4] = ByteUtilities.integerToByte(-1);
+		}
+		byte[] bool = new byte[1];
+		if (this.isLoop) {
+			bool[0] = (byte) 1;
+		} else {
+			bool[0] = (byte) 0;
+		}
+		bytes[6] = bool;
+		if (this.isRandom) {
+			bool[0] = (byte) 1;
+		} else {
+			bool[0] = (byte) 0;
+		}
+		bytes[7] = bool;
+		bytes[8] = ByteUtilities.integerToByte(this.sprites.size()); // number of animation sprites to come
+		if (this.sprite != null) {
+			bytes[7] = this.sprite.getPath().getBytes(); // eighth: file path as string
+			bytes[6] = ByteUtilities.integerToByte(bytes[7].length); // seventh: length of the file path
+		} else { // set the length to a negative value if the file is null
+			bytes[6] = ByteUtilities.integerToByte(-1);
+		}
+		return ByteUtilities.join(bytes);	
 	}
 
 	@Override
-	public boolean createFromBytes(byte[] bytes) {
-		// TODO Auto-generated method stub
-		return false;
+	public void createFromBytes(byte[] bytes) {
+		
 	}
 	
 	
@@ -298,6 +336,24 @@ public class Animation extends GameClass {
 			return this.length;
 		}
 		
+		private byte[] toByte() {
+			byte[][] bytes = new byte[3][];
+			if (this.sprite.getClassID() != null) { // only ID needed since it's a reference
+				bytes[1] = this.sprite.getClassID().toByte(); // second: class ID
+				bytes[0] = ByteUtilities.integerToByte(bytes[1].length); // first: length of the class ID
+			} else { // set the length to a negative value if the file is null
+				bytes[0] = ByteUtilities.integerToByte(-1);
+				LoggingHandler.getLog().warning("The ClassID of " + this.sprite + " is invalid.");
+			}
+			bytes[2] = ByteUtilities.longToByte(this.length);
+			return ByteUtilities.join(bytes);
+		}
+		
+	}
+
+	@Override
+	public byte[] getType() {
+		return TYPE;
 	}
 
 }

@@ -1,5 +1,7 @@
 package asgardengine.game.classes;
 
+import java.util.Arrays;
+
 import asgardengine.utility.BaseID;
 import asgardengine.utility.binary.ByteUtilities;
 
@@ -13,6 +15,11 @@ public class ClassID extends BaseID{
 	public ClassID(byte[] iD, byte[] index) {
 		super(ID_LENGTH, iD);
 		this.index = BaseID.fill(INDEX_LENGTH, index);		
+	}
+	
+	public ClassID(byte[] wholeID) {
+		super(ID_LENGTH, Arrays.copyOfRange(BaseID.fill(INDEX_LENGTH + ID_LENGTH, wholeID), INDEX_LENGTH, INDEX_LENGTH + ID_LENGTH));
+		this.index = Arrays.copyOfRange(BaseID.fill(INDEX_LENGTH + ID_LENGTH, wholeID), 0, INDEX_LENGTH);		
 	}
 	
 	public byte[] getIndex() {

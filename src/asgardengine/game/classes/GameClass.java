@@ -10,6 +10,7 @@ package asgardengine.game.classes;
 public abstract class GameClass {
 
 	private ClassID classID = null; // a unique identifier
+	private String descriptiveName = null; // a name displayed by editors
 	
 	public GameClass(ClassID classID) {
 		this.setClassID(classID);
@@ -17,9 +18,14 @@ public abstract class GameClass {
 	
 	// constructor for recreation of saved objects // no ID necessary as it's encoded in the byte array
 	public GameClass(byte[] bytes) {
-		this.createFromBytes(bytes);
+//		this.createFromBytes(bytes); // not part of the super constructor to banish the need for uninitialised variables as super constructors get executed before initialisation of subclass variables, so init overwrites set values
 	}
 
+	/**
+	 * Export the state of this object to an array of bytes.
+	 * 
+	 * @return an array of bytes containing all information to rebuild the object
+	 */
 	public abstract byte[] toBytes(); // export all relevant data to an array of bytes
 	/**
 	 * Restore the status of a GameClass object from an array of bytes.
@@ -53,6 +59,24 @@ public abstract class GameClass {
 	 */
 	public void setClassID(ClassID classID) {
 		this.classID = classID;
+	}
+
+	/**
+	 * Get a short descriptive Name for this class.
+	 * 
+	 * @return a short, descriptive String for this class
+	 */
+	public String getDescriptiveName() {
+		return this.descriptiveName;
+	}
+
+	/**
+	 * Set a short, descriptive String for this class.
+	 * 
+	 * @param descriptiveName - the String to be set
+	 */
+	public void setDescriptiveName(String descriptiveName) {
+		this.descriptiveName = descriptiveName;
 	}
 	
 }

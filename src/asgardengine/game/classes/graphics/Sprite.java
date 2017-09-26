@@ -2,13 +2,16 @@ package asgardengine.game.classes.graphics;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
+import asgardengine.utility.binary.ByteUtilities;
 import asgardengine.utility.logging.LoggingHandler;
 
 /**
@@ -20,7 +23,7 @@ import asgardengine.utility.logging.LoggingHandler;
  */
 public class Sprite extends GameClass implements Drawable {
 	
-	public static final byte[] TYPE = {0, 1};
+	public static final byte[] TYPE = {0, 1}; // an identifier for this class type
 	
 	private File sprite = null; // store the sprite as path to save memory
 	private BufferedImage preload = null; // a preloaded version to enhance performance
@@ -32,11 +35,12 @@ public class Sprite extends GameClass implements Drawable {
 	
 	public Sprite(ClassID classID, Path imagePath) {
 		super(classID);
-		this.sprite = imagePath.toFile();
+		this.setSprite(imagePath);
 	}
 	
 	public Sprite(byte[] bytes) {
 		super(bytes);
+		this.createFromBytes(bytes);
 	}
 	
 //	public Sprite clone() {
@@ -62,16 +66,69 @@ public class Sprite extends GameClass implements Drawable {
 	
 	@Override
 	public byte[] toBytes() {
-		byte[] bytes = null;
-		return bytes;
+		byte[][] bytes = new byte[8][];
+		bytes[0] = ByteUtilities.integerToByte(this.getType().length); // first: length of the type array
+		bytes[1] = this.getType(); // second: type array
+		if (this.getClassID() != null) {
+			bytes[3] = this.getClassID().toByte(); // fourth: class ID
+			bytes[2] = ByteUtilities.integerToByte(bytes[3].length); // third: length of the class ID
+		} else { // set the length to a negative value if the file is null
+			bytes[2] = ByteUtilities.integerToByte(-1);
+			LoggingHandler.getLog().warning("The ClassID of " + this + " is invalid.");
+		}
+		if (this.getDescriptiveName() != null) {
+			bytes[5] = this.getDescriptiveName().getBytes(); // sixth: descriptive
+			bytes[4] = ByteUtilities.integerToByte(bytes[5].length); // fifth: length of the descriptive
+		} else { // set the length to a negative value if the descriptive is null
+			bytes[4] = ByteUtilities.integerToByte(-1);
+		}
+		if (this.sprite != null) {
+			bytes[7] = this.sprite.getPath().getBytes(); // eighth: file path as string
+			bytes[6] = ByteUtilities.integerToByte(bytes[7].length); // seventh: length of the file path
+		} else { // set the length to a negative value if the file is null
+			bytes[6] = ByteUtilities.integerToByte(-1);
+		}
+		return ByteUtilities.join(bytes);	
 	}
 
 	@Override
 	public void createFromBytes(byte[] bytes) {
-		if () {
-			
+		if (bytes != null) {
+			ByteBuffer bb = ByteBuffer.wrap(bytes); // create a BuyteBuffer to ease reading
+			int length = bb.getInt(); // a helper variable to determine byte lengths
+			byte[] value = new byte[length]; // a helper variable to read bytes
+			bb.get(value);
+			if (Arrays.equals(value, this.getType())) { // the byte array must have the same type identifier
+				length = bb.getInt(); // get the length of the ClassID
+				if (length >= 0) {
+					value = new byte[length]; // get the ClassID
+					bb.get(value);
+					this.setClassID(new ClassID(value));
+				} else {
+					this.setClassID(null);
+				}
+				length = bb.getInt(); // get the length of the descriptive
+				if (length >= 0) {
+					value = new byte[length];
+					bb.get(value); // get the descriptive
+					this.setDescriptiveName(new String(value));
+				} else {
+					this.setDescriptiveName(null);
+				}
+				length = bb.getInt(); // get the length of the file path
+				if (length >= 0) {
+					value = new byte[length];
+					bb.get(value); // get the file path
+					this.setSprite(new String(value));
+				} else {
+					this.setSprite((File) null);
+				}
+			} else {
+				throw new IllegalArgumentException();
+			}
+		} else {
+			LoggingHandler.getLog().warning(this + " cannot be reacreated from null.");
 		}
-		return false;
 	}
 
 	@Override
@@ -110,7 +167,11 @@ public class Sprite extends GameClass implements Drawable {
 	// setters
 	
 	public void setSprite(Path sprite) {
-		this.sprite = sprite.toFile();
+		if (sprite != null) {
+			this.sprite = sprite.toFile();
+		} else {
+			this.sprite = null;
+		}
 		if (preload != null) {
 			this.preload();
 		}
