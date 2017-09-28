@@ -79,4 +79,12 @@ public abstract class GameClass {
 		this.descriptiveName = descriptiveName;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof GameClass) {
+			return ((GameClass) obj).getClassID().equals(this.getClassID());
+		}
+		return false;
+	}
+	
 }

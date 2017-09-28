@@ -2,9 +2,11 @@ package asgardengine.game.entities.graphics;
 
 import java.awt.image.BufferedImage;
 
+import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Animation;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
+import asgardengine.game.classes.scripts.AnimationScript;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
 
@@ -15,22 +17,28 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	private boolean isPlayed = false; // is the animation currently playing?
 
 	public AnimationEntity(EntityID entityID, Animation animation) {
-		super(entityID, null);
-		if (animation != null) { // workaround to set the ClassID as the constructor call has to come first, so no check for null possible
-			this.setClassID(animation.getClassID());
-		}
+		super(entityID);
 		this.setAnimation(animation);
+		if (this.getScript() != null) {
+			this.getScript().onInit(); // send init event
+		}
 	}
 
 	public AnimationEntity(byte[] bytes) {
 		super(bytes);
 		this.createFromBytes(bytes);
+		if (this.getScript() != null) {
+			this.getScript().onInit(); // send init event
+		}
 	}
 	
 	public boolean play() {
 		if (!this.isPlayed) {
 			this.isPlayed = true;
 			this.start = System.nanoTime();
+			if (this.getScript() != null) {
+				this.getScript().onPlay(); // send play event
+			}
 			return true;
 		}
 		return false;
@@ -39,6 +47,9 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	public boolean stop() {
 		if (this.isPlayed) {
 			this.isPlayed = false;
+			if (this.getScript() != null) {
+				this.getScript().onStop(); // send stop event
+			}
 			return true;
 		}
 		return false;
@@ -63,6 +74,22 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	public void setAnimation(Animation animation) {
 		this.animation = animation;
 	}
+	
+	/**
+	 * Get the script attached to the corresponding animation. <br>
+	 * This is just a convenience method and basically: <br>
+	 * <br>
+	 * this.getAnimation().getScript();
+	 * 
+	 * @return the AnimationScript attached to the corresponding animation
+	 */
+	public AnimationScript getScript() {
+		if (this.getAnimation() != null) {
+			return this.getAnimation().getScript();
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public BufferedImage toBufferedImage() {
@@ -81,6 +108,16 @@ public class AnimationEntity extends GameEntity implements Drawable{
 			}
 		}
 		return null;
+	}
+
+//	@Override
+//	public byte[] getType() {
+//		return Animation.TYPE; // same as the corresponding class
+//	}
+
+	@Override
+	public GameClass getSource() {
+		return animation;
 	}
 
 }
