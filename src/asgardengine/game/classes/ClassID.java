@@ -10,6 +10,7 @@ public class ClassID extends BaseID{
 
 	public static final int ID_LENGTH = 4; // length of the id array
 	public static final int INDEX_LENGTH = 2; // length of the index array
+	public static final int TOTAL_LENGTH = ID_LENGTH + INDEX_LENGTH; // total id length
 	private byte[] index = new byte[INDEX_LENGTH];
 	
 	public ClassID(byte[] iD, byte[] index) {

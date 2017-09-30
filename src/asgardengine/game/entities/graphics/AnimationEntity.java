@@ -10,7 +10,7 @@ import asgardengine.game.classes.scripts.AnimationScript;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
 
-public class AnimationEntity extends GameEntity implements Drawable{
+public class AnimationEntity extends GameEntity implements Drawable {
 	
 	private Animation animation = null; // the animation this instance plays
 	private long start = 0; // the starting time of playing the animation
@@ -64,7 +64,6 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	@Override
 	public void createFromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public Animation getAnimation() {
@@ -119,5 +118,10 @@ public class AnimationEntity extends GameEntity implements Drawable{
 	public GameClass getSource() {
 		return animation;
 	}
+
+//	@Override
+//	public boolean didDrawingChange() {
+//		return true;
+//	}
 
 }

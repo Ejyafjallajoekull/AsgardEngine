@@ -1,5 +1,7 @@
 package asgardengine.game.classes.graphics;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -27,6 +29,9 @@ public class Sprite extends GameClass implements Drawable {
 	
 	private File sprite = null; // store the sprite as path to save memory
 	private BufferedImage preload = null; // a preloaded version to enhance performance
+	private int scaleY = -1; // scaling disabled by default
+	private int scaleX = -1; // scaling disabled by default
+//	private File change = null; // monitor changes
 	
 	public Sprite(ClassID classID, File image) {
 		super(classID);
@@ -36,6 +41,7 @@ public class Sprite extends GameClass implements Drawable {
 	public Sprite(ClassID classID, Path imagePath) {
 		super(classID);
 		this.setSprite(imagePath);
+		
 	}
 	
 	public Sprite(byte[] bytes) {
@@ -54,7 +60,25 @@ public class Sprite extends GameClass implements Drawable {
 	public boolean preload() {
 		if (this.sprite != null && this.sprite.isFile()) {
 			try {
-				preload = ImageIO.read(this.sprite);
+				this.preload = ImageIO.read(this.sprite);
+				if (this.scaleY >= 0 || this.scaleX >= 0) {
+					int x = this.preload.getWidth();
+					int y = this.preload.getHeight();
+					if (this.scaleY >= 0) {
+						y = this.scaleY;
+					}
+					if (this.scaleX >= 0) {
+						x = this.scaleX;
+					}
+//					GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+//					BufferedImage resized = gc.createCompatibleImage(x, y);
+					BufferedImage resized = new BufferedImage(x, y, this.preload.getType());
+					Graphics2D g = resized.createGraphics();
+					g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+					g.drawImage(this.preload, 0, 0, x, y, 0, 0, this.preload.getWidth(), this.preload.getHeight(), null);
+					g.dispose();					
+					this.preload = resized;
+				}
 				return true;
 			} catch (Exception e) {
 				LoggingHandler.getLog().log(Level.SEVERE, "Sprite " + this.sprite + " could not be preloaded.", e);
@@ -147,7 +171,8 @@ public class Sprite extends GameClass implements Drawable {
 		} else {
 			if (this.sprite != null && this.sprite.isFile()) {
 				try {
-					return ImageIO.read(this.sprite);
+					this.preload();
+					return this.preload;
 				} catch (Exception e) {
 					LoggingHandler.getLog().log(Level.SEVERE, "Sprite " + this.sprite + " could not be read.", e);
 					e.printStackTrace();
@@ -190,10 +215,27 @@ public class Sprite extends GameClass implements Drawable {
 			this.preload();
 		}
 	}
+	
+	public void setScale(int width, int height) {
+		this.scaleY = height;
+		this.scaleX = width;
+		if (this.preload != null) {
+			this.preload();
+		}
+	}
 
 	@Override
 	public byte[] getType() {
 		return TYPE;
 	}
+
+//	@Override
+//	public boolean didDrawingChange() {
+//		if (this.sprite != this.change) {
+//			this.change = this.sprite;
+//			return true;
+//		}
+//		return false;
+//	}
 
 }

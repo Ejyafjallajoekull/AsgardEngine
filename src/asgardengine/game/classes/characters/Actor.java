@@ -15,7 +15,7 @@ public class Actor extends GameClass implements Drawable {
 	
 	private Sprite actorSprite = null; // the basic sprite of this character
 	private ArrayList<Animation> animations = new ArrayList<Animation>(); // all animations this actor can perform
-	
+	private Sprite change = null; // did the sprite change?
 	
 	public Actor(ClassID classID) {
 		super(classID);
@@ -73,6 +73,15 @@ public class Actor extends GameClass implements Drawable {
 
 	public void setActorSprite(Sprite actorSprite) {
 		this.actorSprite = actorSprite;
+	}
+
+	@Override
+	public boolean didDrawingChange() {
+		if (this.actorSprite != this.change) {
+			this.change = this.actorSprite;
+			return this.actorSprite.didDrawingChange();
+		}
+		return false;
 	}
 
 }

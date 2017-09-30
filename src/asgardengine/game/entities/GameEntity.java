@@ -1,6 +1,7 @@
 package asgardengine.game.entities;
 
 import asgardengine.game.classes.GameClass;
+import asgardengine.game.handler.EntityHandler;
 
 public abstract class GameEntity {
 	// a instance of a GameClass
@@ -30,6 +31,7 @@ public abstract class GameEntity {
 
 	public void setEntityID(EntityID entityID) {
 		this.entityID = entityID;
+		EntityHandler.add(this);
 	}
 
 	@Override

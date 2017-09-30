@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import asgardengine.game.classes.characters.Actor;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.world.Placeable;
+import asgardengine.game.classes.world.Position;
+import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
 import asgardengine.game.entities.graphics.AnimationEntity;
@@ -13,6 +15,9 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	
 	private Actor actor = null;
 	private AnimationEntity currentAnim = null; // the animation currently played
+	
+	private Position position = new Position();
+	private Rotation1D rotation = new Rotation1D();
 
 	public ActorEntity(EntityID entityID, Actor actor) {
 		super(entityID);
@@ -55,5 +60,39 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 			return this.actor.toBufferedImage();
 		}
 	}
+
+	@Override
+	public Position getPosition() {
+		return this.position;
+	}
+
+	@Override
+	public Rotation1D getRotation() {
+		return this.rotation;
+	}
+
+	@Override
+	public void setPosition(Position position) {
+		this.position = position;	
+	}
+
+	@Override
+	public void setRotation(Rotation1D rotation) {
+		this.rotation = rotation;	
+	}
+
+//	@Override
+//	public boolean didPlaceChange() {
+//		if () {
+//			
+//		}
+//		return false;
+//	}
+
+//	@Override
+//	public boolean didDrawingChange() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
 
 }

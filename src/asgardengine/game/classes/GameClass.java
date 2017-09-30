@@ -1,5 +1,7 @@
 package asgardengine.game.classes;
 
+import asgardengine.game.handler.ClassHandler;
+
 /**
  * The abstract GameClass class specifies the basic behaviour of all entity types
  * in the engine.
@@ -53,12 +55,14 @@ public abstract class GameClass {
 	/**
 	 * Set the unique identifier for this GameClass Object to be the specified ClassID.
 	 * Warning: If a consistent relation of object and ID should be established, it's
-	 * not advised to use this function uncoutiously.
+	 * not advised to use this function incautiously. <br>
+	 * The object will automatically get added to the ClassHandler.
 	 * 
 	 * @param classID - a unique ClassID for this object 
 	 */
 	public void setClassID(ClassID classID) {
 		this.classID = classID;
+		ClassHandler.add(this);
 	}
 
 	/**

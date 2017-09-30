@@ -17,4 +17,5 @@ public interface Drawable {
 	 * @return A BufferedImage representation of the given object.
 	 */
 	public BufferedImage toBufferedImage();
+	
 }
