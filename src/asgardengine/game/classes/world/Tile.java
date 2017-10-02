@@ -14,15 +14,18 @@ import asgardengine.game.classes.graphics.Sprite;
  * @author Planters
  *
  */
-public class Tile extends GameClass implements Drawable, Placeable {
+public class Tile extends GameClass implements Drawable {
 	
 	public static final byte[] TYPE = {0, 3};
-	
 	private Animation animation = null;
 	private Sprite basicSprite = null;
+	
+	private boolean isStatic = false; // will the appearance of this tile change at runtime
+	
 
-	public Tile(ClassID classID) {
+	public Tile(ClassID classID, Sprite sprite) {
 		super(classID);
+		this.basicSprite = sprite;
 	}
 
 	public Tile(byte[] bytes) {
@@ -50,7 +53,25 @@ public class Tile extends GameClass implements Drawable, Placeable {
 	@Override
 	public BufferedImage toBufferedImage() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.basicSprite.toBufferedImage();
+	}
+
+	/**
+	 * Get if the appearance of this Tile will change at runtime.
+	 * 
+	 * @return true if this Tile is static
+	 */
+	public boolean isStatic() {
+		return this.isStatic;
+	}
+
+	/**
+	 * Set if the appearance of this Tile will change at runtime.
+	 * 
+	 * @param isStatic - true if this Tile is static
+	 */
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
 	}
 
 }

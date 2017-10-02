@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Animation;
+import asgardengine.game.classes.graphics.DirectionalSprite;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 
@@ -13,9 +14,9 @@ public class Actor extends GameClass implements Drawable {
 
 	public static final byte[] TYPE = {0, 0};
 	
-	private Sprite actorSprite = null; // the basic sprite of this character
+	private Sprite actorSprite = null; // the current sprite of this character
 	private ArrayList<Animation> animations = new ArrayList<Animation>(); // all animations this actor can perform
-	private Sprite change = null; // did the sprite change?
+	private DirectionalSprite idle = null;
 	
 	public Actor(ClassID classID) {
 		super(classID);
@@ -75,13 +76,12 @@ public class Actor extends GameClass implements Drawable {
 		this.actorSprite = actorSprite;
 	}
 
-	@Override
-	public boolean didDrawingChange() {
-		if (this.actorSprite != this.change) {
-			this.change = this.actorSprite;
-			return this.actorSprite.didDrawingChange();
-		}
-		return false;
+	public DirectionalSprite getIdle() {
+		return idle;
+	}
+
+	public void setIdle(DirectionalSprite idle) {
+		this.idle = idle;
 	}
 
 }

@@ -10,17 +10,22 @@ import java.nio.file.Files;
 import java.util.Random;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import asgardengine.game.classes.characters.Actor;
 import asgardengine.game.classes.graphics.Animation;
+import asgardengine.game.classes.graphics.DirectionalSprite;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
+import asgardengine.game.classes.world.Rotation1D;
+import asgardengine.game.classes.world.Tile;
+import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.actors.ActorEntity;
+import asgardengine.game.entities.world.TileEntity;
 import asgardengine.game.handler.ClassHandler;
 import asgardengine.game.handler.EntityHandler;
+import asgardengine.utility.logging.LoggingHandler;
 
 public class RenderPanel extends JPanel {
 
@@ -31,6 +36,11 @@ public class RenderPanel extends JPanel {
 //	public Timer timer = new Timer(1000/240, l -> {this.repaint();});
 	
 	public RenderPanel() {
+		this.test();
+	}
+	
+	public void test() {
+		LoggingHandler.startLogWriting();
 		byte[] index = {0,0};
 		byte[] ggf = null;
 		try {
@@ -46,7 +56,21 @@ public class RenderPanel extends JPanel {
 	//	Sprite s = new Sprite(new ClassID(b, a), new File("Test//flygon.gif"));
 //		Sprite gf = new Sprite(new ClassID(b, a), new File("Test//golbat.png"));
 		Sprite gb = new Sprite(ClassHandler.nextID(index), new File("Test//golbat_b.png"));
-//		try {
+		Sprite grass01 = new Sprite(ClassHandler.nextID(index), new File("Test//green_01.png"));
+		Tile grassTile01 = new Tile(ClassHandler.nextID(index), grass01);
+		Sprite rock01 = new Sprite(ClassHandler.nextID(index), new File("Test//rock01.png"));
+		Tile rockTile01 = new Tile(ClassHandler.nextID(index), rock01);
+		Sprite pool01 = new Sprite(ClassHandler.nextID(index), new File("Test//pool.png"));
+		Tile poolTile01 = new Tile(ClassHandler.nextID(index), pool01);
+		Sprite heroFront = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_front.png"));
+		Sprite heroBack = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_back.png"));
+		Sprite heroRight = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_right.png"));
+		Sprite heroLeft = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_left.png"));
+		DirectionalSprite heroSprite = new DirectionalSprite(ClassHandler.nextID(index), heroFront, heroBack, heroLeft, heroRight);
+		Actor hero = new Actor(ClassHandler.nextID(index));
+		hero.setIdle(heroSprite);
+		ActorEntity heroRef = new ActorEntity(EntityHandler.nextID(), hero);
+		//		try {
 //			FileOutputStream fos = new FileOutputStream(new File("Test//a.sp"));
 //			try {
 //				fos.write(gf.toBytes());
@@ -64,6 +88,7 @@ public class RenderPanel extends JPanel {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		
 		
 		Animation anim = new Animation(ClassHandler.nextID(index));
 		anim.addAnimationSpirte(gf, 1000000000l);
@@ -86,11 +111,28 @@ public class RenderPanel extends JPanel {
 		testPlace.setBackground(black);
 		testPlace.getBackground().setScale(1920, 1080);
 		Random rr = new Random();
-		for (int i = 0; i < 10000; i++) {
-			golbatRef = new ActorEntity(EntityHandler.nextID(), golbat);
-			golbatRef.playAnimation(0);
-			testPlace.add(golbatRef, rr.nextInt(1920), rr.nextInt(1080), 0);
+//		golbatRef = new ActorEntity(EntityHandler.nextID(), golbat);
+		golbatRef = heroRef;
+		int x = 0;
+		int y = 0;
+		TileEntity grassE01 = null;
+		for (int i = 0; i < 8100; i++) {
+			grassE01 = new TileEntity(EntityHandler.nextID(), grassTile01);
+			testPlace.add(grassE01, x, y, 0);
+			if (x >= 1920) {
+				x = 0;
+				y += 15;
+			} else {
+				x += 15;
+			}
+			if (rr.nextInt(1000) < 1) {
+				testPlace.add(new TileEntity(EntityHandler.nextID(), rockTile01), rr.nextInt(x), rr.nextInt(y), 0);
+			}
 		}
+		TileEntity poolE = new TileEntity(EntityHandler.nextID(), poolTile01);
+		poolE.getRotation().setRotation(45);
+		testPlace.add(poolE, 500, 500, 0);
+		testPlace.add(golbatRef, 300, 300, 0);
 		golbatFRef = golbatRef;
 		this.addKeyListener(new KeyListener() {
 			
@@ -135,7 +177,6 @@ public class RenderPanel extends JPanel {
 				
 			}
 		});
-//		timer.start();
 	}
 	
 	// serialisation
@@ -156,20 +197,24 @@ public class RenderPanel extends JPanel {
 	}
 	
 	public void moveUp() {
-		h--;
+		h-= 1;
 		golbatFRef.getPosition().setY(h);
+		golbatFRef.getRotation().setRotation(0);
 	}
 	public void moveDown() {
 		h++;
 		golbatFRef.getPosition().setY(h);
+		golbatFRef.getRotation().setRotation(180);
 	}
 	public void moveRight() {
 		w++;
 		golbatFRef.getPosition().setX(w);
+		golbatFRef.getRotation().setRotation(90);
 	}
 	public void moveLeft() {
 		w--;
 		golbatFRef.getPosition().setX(w);
+		golbatFRef.getRotation().setRotation(270);
 	}
 	
 }

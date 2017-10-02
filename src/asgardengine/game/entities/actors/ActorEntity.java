@@ -57,7 +57,8 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 		if (this.currentAnim != null) {
 			return this.currentAnim.toBufferedImage();
 		} else {
-			return this.actor.toBufferedImage();
+			this.actor.getIdle().setRotation(this.rotation);
+			return this.actor.getIdle().toBufferedImage();
 		}
 	}
 

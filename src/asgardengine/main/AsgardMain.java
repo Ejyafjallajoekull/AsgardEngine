@@ -6,7 +6,7 @@ import asgardengine.rendering.DisplayFrame;
 import asgardengine.utility.logging.LoggingHandler;
 
 public class AsgardMain implements Runnable {
-
+	
 	private boolean isRunning = false;
 	private Thread mainThreat = null;
 	private int desiredFPS = 120;
@@ -17,6 +17,7 @@ public class AsgardMain implements Runnable {
 	
 	
 	public static void main(String[] args) {
+		System.setProperty("sun.java2d.opengl", "true"); // use OpenGL
 		AsgardMain main = new AsgardMain();
 		main.setFrame(new DisplayFrame());
 		main.start();
@@ -61,7 +62,7 @@ public class AsgardMain implements Runnable {
 				}
 				this.currentFPS++;
 				if (this.currentFPS >= 60) {
-					System.out.println("FPS: " + this.currentFPS/(fpsTime/1000000000d));
+//					System.out.println("FPS: " + this.currentFPS/(fpsTime/1000000000d));
 					this.currentFPS = 0;
 					fpsTime = 0;
 				}

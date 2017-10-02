@@ -23,7 +23,7 @@ public class Rotation1D {
 	 * @param degrees - the degrees of the rotation as double
 	 */
 	public Rotation1D(double degrees) {
-		this.rotation = degrees;
+		this.setRotation(degrees);
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class Rotation1D {
 	 */
 	public Rotation1D(double rotation, boolean rad) {
 		if (rad) {
-			this.rotation = Math.toDegrees(rotation);
+			this.rotation = Math.toRadians(rotation);
 		} else {
 			this.rotation = rotation;
 		}
@@ -46,6 +46,23 @@ public class Rotation1D {
 	
 	public double asRadians() {
 		return Math.toRadians(this.rotation);
+	}
+	
+	public void setRotation(double degrees) {
+		this.rotation = normalise(degrees);
+	}
+	
+	public static double normalise(double degrees) {
+		double transform = degrees%360;
+		if (degrees < 0) {
+			transform = 360.0d + transform;
+		}
+		return transform;
+	}
+	
+	@Override
+	public String toString() {
+		return new Double(this.rotation).toString();
 	}
 	
 }
