@@ -1,70 +1,68 @@
 package asgardengine.game.classes.graphics;
 
-import java.awt.image.BufferedImage;
-
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.world.Rotation1D;
 
 /**
- * The DirectionalSprite class holds four different sprite variants of the same entity. <br>
+ * The DirectionalAnimation class holds four different animation variants of the same entity. <br>
  * A front view, a back view, and two different side views.
  * 
  * @author Planters
  *
  */
-public class DirectionalSprite extends GameClass implements Drawable {
+public class DirectionalAnimation extends GameClass {
 
-	public static final byte[] TYPE = {0, 5};
+	public static final byte[] TYPE = {0, 6};
 	
-	private Sprite[] sprites = new Sprite[4];
+	private Animation[] animations = new Animation[4];
 	private Rotation1D rotation = new Rotation1D();
 	
-	
-	public DirectionalSprite(ClassID classID, Sprite[] sprites) {
+	public DirectionalAnimation(ClassID classID, Animation[] animations) {
 		super(classID);
-		for (int i = 0; i < this.sprites.length; i++) {
-			if ((sprites.length - i) > 0) {
-				this.sprites[i] = sprites[i];
+		for (int i = 0; i < this.animations.length; i++) {
+			if ((animations.length - i) > 0) {
+				this.animations[i] = animations[i];
 			} else {
-				this.sprites[i] = null;
+				this.animations[i] = null;
 			}
 		}
 	}
 	
-	public DirectionalSprite(ClassID classID, Sprite front, Sprite back, Sprite left, Sprite right) {
+	public DirectionalAnimation(ClassID classID, Animation front, Animation back, Animation left, Animation right) {
 		super(classID);
-		this.sprites[0] = front;
-		this.sprites[1] = back;
-		this.sprites[2] = left;
-		this.sprites[3] = right;
+		this.animations[0] = front;
+		this.animations[1] = back;
+		this.animations[2] = left;
+		this.animations[3] = right;
 	}
 
-	public DirectionalSprite(byte[] bytes) {
+
+	public DirectionalAnimation(byte[] bytes) {
 		super(bytes);
 		this.createFromBytes(bytes);
 	}
-
-	public Sprite getSprite() {
+	
+	public Animation getAnimation() {
 		if (this.rotation.asDegrees() >= 225.0d && this.rotation.asDegrees() < 315.0d) {
-			return this.sprites[2]; // left
+			return this.animations[2]; // left
 		} else if (this.rotation.asDegrees() >= 45.0d && this.rotation.asDegrees() < 135.0d) {
-			return this.sprites[3]; // right
+			return this.animations[3]; // right
 		} else if (this.rotation.asDegrees() >= 135.0d && this.rotation.asDegrees() < 225.0d) {
-			return this.sprites[0]; // front
+			return this.animations[0]; // front
 		} else {
-			return this.sprites[1]; // back
+			return this.animations[1]; // back
 		}
 	}
 	
-	public Sprite getSprite(double degrees) {
+	public Animation getAnimation(double degrees) {
 		this.setRotation(degrees);
-		return this.getSprite();
+		return this.getAnimation();
 	}
 	
-	public Sprite getSprite(Rotation1D rotation) {
+	public Animation getAnimation(Rotation1D rotation) {
 		this.setRotation(rotation);
-		return this.getSprite();
+		return this.getAnimation();
 	}
 	
 	/**
@@ -86,7 +84,7 @@ public class DirectionalSprite extends GameClass implements Drawable {
 			this.rotation.setRotation(rotation.asDegrees());	
 		}
 	}
-	
+
 	@Override
 	public byte[] toBytes() {
 		// TODO Auto-generated method stub
@@ -102,16 +100,6 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	@Override
 	public byte[] getType() {
 		return TYPE;
-	}
-
-	@Override
-	public BufferedImage toBufferedImage() {
-		Sprite s = this.getSprite();
-		if (s != null) {
-			return s.toBufferedImage();
-		} else {
-			return null;
-		}
 	}
 
 }

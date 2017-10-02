@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Animation;
+import asgardengine.game.classes.graphics.DirectionalAnimation;
 import asgardengine.game.classes.graphics.DirectionalSprite;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
@@ -16,7 +17,8 @@ public class Actor extends GameClass implements Drawable {
 	
 	private Sprite actorSprite = null; // the current sprite of this character
 	private ArrayList<Animation> animations = new ArrayList<Animation>(); // all animations this actor can perform
-	private DirectionalSprite idle = null;
+	private DirectionalSprite idleSprite = null;
+	private DirectionalAnimation jumpAnimation = null;
 	
 	public Actor(ClassID classID) {
 		super(classID);
@@ -77,11 +79,19 @@ public class Actor extends GameClass implements Drawable {
 	}
 
 	public DirectionalSprite getIdle() {
-		return idle;
+		return idleSprite;
 	}
 
 	public void setIdle(DirectionalSprite idle) {
-		this.idle = idle;
+		this.idleSprite = idle;
+	}
+
+	public DirectionalAnimation getJumpAnimation() {
+		return jumpAnimation;
+	}
+
+	public void setJumpAnimation(DirectionalAnimation jumpAnimation) {
+		this.jumpAnimation = jumpAnimation;
 	}
 
 }

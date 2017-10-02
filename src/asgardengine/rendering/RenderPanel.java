@@ -13,11 +13,13 @@ import javax.swing.JPanel;
 
 import asgardengine.game.classes.characters.Actor;
 import asgardengine.game.classes.graphics.Animation;
+import asgardengine.game.classes.graphics.DirectionalAnimation;
 import asgardengine.game.classes.graphics.DirectionalSprite;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
+import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.classes.world.Tile;
 import asgardengine.game.entities.EntityID;
@@ -67,7 +69,28 @@ public class RenderPanel extends JPanel {
 		Sprite heroRight = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_right.png"));
 		Sprite heroLeft = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//hero_left.png"));
 		DirectionalSprite heroSprite = new DirectionalSprite(ClassHandler.nextID(index), heroFront, heroBack, heroLeft, heroRight);
+		Sprite hero_anim_jump0 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/jump_front_00.png"));
+		Sprite hero_anim_jump1 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/jump_front_01.png"));
+		Sprite hero_anim_jump2 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/jump_front_02.png"));
+		Sprite hero_anim_jump3 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/landing_front_00.png"));
+		Sprite hero_anim_jump4 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/landing_front_01.png"));
+		Sprite hero_anim_jump5 = new Sprite(ClassHandler.nextID(index), new File("Test//Actor//Animation//Jump/landing_front_02.png"));
+		Animation hero_jump_front = new Animation(ClassHandler.nextID(index));
+		hero_jump_front.addAnimationSpirte(hero_anim_jump0, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump1, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump2, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump0, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump1, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump2, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump0, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump1, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump2, 100000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump3, 300000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump4, 150000000);
+		hero_jump_front.addAnimationSpirte(hero_anim_jump5, 150000000);
+		DirectionalAnimation hero_jump = new DirectionalAnimation(ClassHandler.nextID(index), hero_jump_front, null, null, null);
 		Actor hero = new Actor(ClassHandler.nextID(index));
+		hero.setJumpAnimation(hero_jump);
 		hero.setIdle(heroSprite);
 		ActorEntity heroRef = new ActorEntity(EntityHandler.nextID(), hero);
 		//		try {
@@ -152,10 +175,9 @@ public class RenderPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e != null) {
 //					System.out.println(e.getKeyCode());
-					if (e.getKeyCode() == KeyEvent.VK_LEFT + KeyEvent.VK_UP) {
+					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 //						System.out.println("do");
-						moveLeft();
-						moveUp();
+						heroRef.jump();
 					}
 					if (e.getKeyCode() == KeyEvent.VK_UP) {
 //						System.out.println("do");

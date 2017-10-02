@@ -119,6 +119,10 @@ public class AnimationEntity extends GameEntity implements Drawable {
 		return animation;
 	}
 
+	public boolean isPlayed() {
+		return isPlayed;
+	}
+
 //	@Override
 //	public boolean didDrawingChange() {
 //		return true;
