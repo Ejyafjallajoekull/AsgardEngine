@@ -27,6 +27,7 @@ import asgardengine.game.entities.actors.ActorEntity;
 import asgardengine.game.entities.world.TileEntity;
 import asgardengine.game.handler.ClassHandler;
 import asgardengine.game.handler.EntityHandler;
+import asgardengine.game.handler.PlayerControlHandler;
 import asgardengine.utility.logging.LoggingHandler;
 
 public class RenderPanel extends JPanel {
@@ -35,7 +36,10 @@ public class RenderPanel extends JPanel {
 	private ActorEntity golbatFRef = null;
 	public int w = 0;
 	public int h = 0;
+	public Random random = new Random();
 //	public Timer timer = new Timer(1000/240, l -> {this.repaint();});
+	public Position screenCenter = new Position(300d, 300d, 0.0d);
+	public Position relativePosition = new Position();
 	
 	public RenderPanel() {
 		this.test();
@@ -153,52 +157,12 @@ public class RenderPanel extends JPanel {
 			}
 		}
 		TileEntity poolE = new TileEntity(EntityHandler.nextID(), poolTile01);
-		poolE.getRotation().setRotation(45);
+//		poolE.getRotation().setRotation(45);
 		testPlace.add(poolE, 500, 500, 0);
 		testPlace.add(golbatRef, 300, 300, 0);
 		golbatFRef = golbatRef;
-		this.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-//				System.out.println(e.getKeyCode());
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-//				System.out.println(e.getKeyCode());
-//				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e != null) {
-//					System.out.println(e.getKeyCode());
-					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-//						System.out.println("do");
-						heroRef.jump();
-					}
-					if (e.getKeyCode() == KeyEvent.VK_UP) {
-//						System.out.println("do");
-						moveUp();
-					}
-					if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//						System.out.println("do");
-						moveDown();
-					}
-					if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//						System.out.println("do");
-						moveRight();
-					}
-					if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-//						System.out.println("do");
-						moveLeft();
-					}
-				}
-				
-			}
-		});
+		this.addKeyListener(new PlayerControlHandler(heroRef));
+		relativePosition = Position.subtract(heroRef.getPosition(), screenCenter);
 	}
 	
 	// serialisation
@@ -212,8 +176,11 @@ public class RenderPanel extends JPanel {
 	
 	private void render(Graphics2D g){
 		((Graphics2D) g).drawImage(testPlace.getBackground().toBufferedImage(), 0, 0, null);
+		Position pos = null;
+		relativePosition = Position.subtract(golbatFRef.getPosition(), screenCenter);
 		for (Drawable d : testPlace.getDrawables()) {
-			((Graphics2D) g).drawImage(d.toBufferedImage(),(int) ((Placeable) d).getPosition().getX(), (int) ((Placeable) d).getPosition().getY(), null);
+			pos = Position.subtract(((Placeable) d).getPosition(), this.relativePosition);
+			((Graphics2D) g).drawImage(d.toBufferedImage(),(int) pos.getX(), (int) pos.getY(), null);
 		}
 		g.dispose();
 	}

@@ -24,6 +24,11 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	//states
 	private boolean isJumping = false;
 	private Timer jumpTimer = new Timer(0, a -> this.isJumping = false); // timer to reset jumping
+	private boolean isWalking = false;
+	private boolean isRunning = false;
+	
+	//attributes
+	private double baseSpeed = 40.0d;
 	
 	private Position position = new Position();
 	private Rotation1D rotation = new Rotation1D();
@@ -44,12 +49,24 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 		return this.currentAnim.play();
 	}
 
-	public void walk() {
-		
-	}
-	
-	public void run() {
-		
+	public void walk(boolean walking) {
+		if (!isJumping) {
+			double speed = this.baseSpeed;
+			if (isRunning) {
+				speed = speed * 2;
+			}
+			
+			if (walking) {
+				this.isWalking = true;
+				this.getPosition().setMovementX(Math.sin(this.rotation.asRadians())*speed);
+				this.getPosition().setMovementY((-1.0d)*Math.cos(this.rotation.asRadians())*speed);
+			} else {
+				this.isWalking = false;
+				this.getPosition().setMovementX(0.0d);
+				this.getPosition().setMovementY(0.0d);
+
+			}	
+		}
 	}
 	
 	public void move(Position position, double speed) {
@@ -124,6 +141,14 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	@Override
 	public void setRotation(Rotation1D rotation) {
 		this.rotation = rotation;	
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 
 //	@Override

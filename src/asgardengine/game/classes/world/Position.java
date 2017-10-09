@@ -3,18 +3,23 @@ package asgardengine.game.classes.world;
 import java.util.Arrays;
 
 /**
- * The Position class represents a three dimensional vector.
+ * The Position class represents a three dimensional vector. <br>
+ * It also includes a movement vector.
  * 
  * @author Planters
  *
  */
 public class Position {
 	
-	// TODO: add function such as add, scalar product, distance,...
+	// TODO: add function such as degrees & movement & acceleration
 	
-	private double x = 0.0;
-	private double y = 0.0;
-	private double z = 0.0;
+	private double x = 0.0d;
+	private double y = 0.0d;
+	private double z = 0.0d;
+	private double moveX = 0.0d;
+	private double moveY = 0.0d;
+	private double moveZ = 0.0d;
+	private long movementStart = -1l;
 	
 	/**
 	 * Create a new three dimensional vector with the coordinates {0, 0, 0}.
@@ -26,9 +31,9 @@ public class Position {
 	/**
 	 * Create a new three dimensional vector with the specified coordinates.
 	 * 
-	 * @param x - the X coordinate as double
-	 * @param y - the Y coordinate as double
-	 * @param z - the Z coordinate as double
+	 * @param x - the X-coordinate as double
+	 * @param y - the Y-coordinate as double
+	 * @param z - the Z-coordinate as double
 	 */
 	public Position(double x, double y, double z) {
 		this.x = x;
@@ -37,12 +42,14 @@ public class Position {
 	}
 	
 	/**
-	 * Convert this vector to its' double array representation.
+	 * Convert this vector to its' double array representation. <br>
+	 * Starting with the coordinates and followed by the movement vector.
 	 * 
-	 * @return a array of doubles with a length of 3
+	 * @return a array of doubles with a length of 6
 	 */
 	public double[] toArray() {
-		return new double[]{this.x, this.y, this.z};
+		this.updateCoordinates();
+		return new double[]{this.x, this.y, this.z, this.moveX, this.moveY, this.moveZ};
 	}
 	
 	/**
@@ -51,6 +58,7 @@ public class Position {
 	 * @return the X coordinate of this vector as a double
 	 */
 	public double getX() {
+		this.updateCoordinates();
 		return this.x;
 	}
 	
@@ -69,6 +77,7 @@ public class Position {
 	 * @return the Y coordinate of this vector as a double
 	 */
 	public double getY() {
+		this.updateCoordinates();
 		return this.y;
 	}
 	
@@ -87,6 +96,7 @@ public class Position {
 	 * @return the Z coordinate of this vector as a double
 	 */
 	public double getZ() {
+		this.updateCoordinates();
 		return this.z;
 	}
 	
@@ -97,6 +107,112 @@ public class Position {
 	 */
 	public void setZ(double z) {
 		this.z = z;
+	}
+	
+	/**
+	 * Set the coordinates of this Position vector to the specified ones.
+	 * 
+	 * @param x - the X-coordinate as double
+	 * @param y - the Y-coordinate as double
+	 * @param z - the Z-coordinate as double
+	 */
+	public void setCoordinates(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	/**
+	 * Get the X-value of the movement vector of this Position.
+	 * 
+	 * @return the X-movement [value/second] as double
+	 */
+	public double getMovementX() {
+		return this.moveX;
+	}
+	
+	/**
+	 * Get the Y-value of the movement vector of this Position.
+	 * 
+	 * @return the Y-movement [value/second] as double
+	 */
+	public double getMovementY() {
+		return this.moveY;
+	}
+	
+	/**
+	 * Get the Z-value of the movement vector of this Position.
+	 * 
+	 * @return the Z-movement [value/second] as double
+	 */
+	public double getMovementZ() {
+		return this.moveZ;
+	}
+	
+	/**
+	 * Set the X-value of this Positions' movement vector to the specified value.
+	 * 
+	 * @param x - the X-movement [value/second] as double
+	 */
+	public void setMovementX(double x) {
+		this.updateCoordinates();
+		this.moveX = x;
+	}
+	
+	/**
+	 * Set the Y-value of this Positions' movement vector to the specified value.
+	 * 
+	 * @param y - the Y-movement [value/second] as double
+	 */
+	public void setMovementY(double y) {
+		this.updateCoordinates();
+		this.moveY = y;
+	}
+	
+	/**
+	 * Set the Z-value of this Positions' movement vector to the specified value.
+	 * 
+	 * @param z - the Z-movement [value/second] as double
+	 */
+	public void setMovementZ(double z) {
+		this.updateCoordinates();
+		this.moveZ = z;
+	}
+	
+	/**
+	 * Set the movement values of this Position vector to the specified ones.
+	 * 
+	 * @param x - the X-value [value/second] as double
+	 * @param y - the Y-value [value/second] as double
+	 * @param z - the Z-value [value/second] as double
+	 */
+	public void setMovement(double x, double y, double z) {
+		this.updateCoordinates();
+		this.moveX = x;
+		this.moveY = y;
+		this.moveZ = z;
+	}
+	
+	/**
+	 * Checks if this position has a movement vector, which amount is different from zero.
+	 * 
+	 * @return true if the amount of the movement vector of this Position is different from zero
+	 */
+	public boolean isMoving() {
+		if (this.moveX != 0.0d || this.moveY != 0.0d || this.moveZ != 0.0d) { // amount == 0.0d could also be checked
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Calculate the movement speed of this Position in value/second.
+	 * 
+	 * @return the movement speed in value/second as double
+	 */
+	public double getSpeed() {
+		return amount(new Position(this.moveX, this.moveY, this.moveZ));
 	}
 	
 	/**
@@ -129,24 +245,80 @@ public class Position {
 		return amount(this);
 	}
 	
-	public Position add(Position addend) {
-		return add(this, addend);
+	/**
+	 * Add the specified vector to this one.
+	 * 
+	 * @param addend - the Position vector to add to this vector
+	 */
+	public void add(Position addend) {
+		 if (addend != null) {
+				this.setX(this.getX() + addend.getX());
+				this.setY(this.getY() + addend.getY());
+				this.setZ(this.getZ() + addend.getZ());
+		 }
 	}
 	
-	public Position subtract(Position subtrahend) {
-		return subtract(this, subtrahend);
+	/**
+	 * Subtract the specified vector to this one.
+	 * 
+	 * @param subtrahend - the Position vector to subtract from this vector
+	 */
+	public void subtract(Position subtrahend) {
+		 if (subtrahend != null) {
+				this.setX(this.getX() - subtrahend.getX());
+				this.setY(this.getY() - subtrahend.getY());
+				this.setZ(this.getZ() - subtrahend.getZ());
+		 }
 	}
 	
-	public Position multiply(double multiplier) {
-		return multiply(this, multiplier);
+	/**
+	 * Multiply this vector with the specified multiplier.
+	 * 
+	 * @param multiplier - the double to multiply this vector with
+	 */
+	public void multiply(double multiplier) {
+		this.setX(this.getX() * multiplier);
+		this.setY(this.getY() * multiplier);
+		this.setZ(this.getZ() * multiplier);
 	}
 	
-	public Position divide(double divisor) {
-		return divide(this, divisor);
-	}
+	/**
+	 * Divide this vector by the specified divisor.
+	 * 
+	 * @param divisor - the double to divide this vector by
+	 */
+	public void divide(double divisor) {
+		this.setX(this.getX() * divisor);
+		this.setY(this.getY() * divisor);
+		this.setZ(this.getZ() * divisor);	}
 	
+	/**
+	 * Calculate the distance of this vector to the specified vector. <br>
+	 * This is equal to: <b> amount(this.subtract(vector)) </b>
+	 * 
+	 * @param vector - the Position vector to calculate the distance to
+	 * @return the distance between both Position vectors as double
+	 */
 	public double distance(Position vector) {
 		return distance(this, vector);
+	}
+	
+	// update the coordinates of this Position vector if it is currently moving
+	private void updateCoordinates() {
+		if (this.isMoving()) {
+			if (this.movementStart >= 0l) { // for all preceding calls
+				long diff = System.nanoTime() - this.movementStart;
+				double diffSec = diff / 1000000000.0d; // the difference in seconds
+				this.x += this.getMovementX() * diffSec;
+				this.y += this.getMovementY() * diffSec;
+				this.z += this.getMovementZ() * diffSec;
+				this.movementStart += diff; // set for the next update interval
+			} else { // for the first call
+				this.movementStart = System.nanoTime();
+			}
+		} else { // set to do not track
+			this.movementStart = -1l;
+		}
 	}
 	
 	/**
@@ -282,7 +454,7 @@ public class Position {
 	
 	/**
 	 * Calculate the distance between the two specified vectors. <br>
-	 * This is equal to: amount(subtract(vector1, vector2))
+	 * This is equal to: <b> amount(subtract(vector1, vector2)) </b>
 	 * 
 	 * @param vector1 - the first Position vector
 	 * @param vector2 - the second Position vector
@@ -304,12 +476,14 @@ public class Position {
 	
 	@Override
 	public Position clone() {
-		return new Position(this.getX(), this.getY(), this.getZ());
+		Position pos = new Position(this.getX(), this.getY(), this.getZ());
+		pos.setMovement(this.getMovementX(), this.getMovementY(), this.getMovementZ());
+		return pos;
 	}
 	
 	@Override
 	public String toString() {
-		return ("Position(X = " + this.getX() + " ; Y = " + this.getY() + " ; Z = " + this.getZ() + ")");
+		return ("Position(X = " + this.getX() + " ; Y = " + this.getY() + " ; Z = " + this.getZ() + " / X-Movement = " + this.getMovementX() + " ; Y-Movement = " + this.getMovementY() + " ; Z-Movement = " + this.getMovementZ() + ")");
 	}
 	
 	@Override
@@ -317,7 +491,7 @@ public class Position {
 		if (obj != null) {
 			if (obj instanceof Position) {
 				Position pos = (Position) obj;
-				if (this.getX() == pos.getX() && this.getY() == pos.getY() && this.getZ() == pos.getZ()) {
+				if (this.getX() == pos.getX() && this.getY() == pos.getY() && this.getZ() == pos.getZ() && this.getMovementX() == pos.getMovementX()  && this.getMovementY() == pos.getMovementY()  && this.getMovementZ() == pos.getMovementZ()) {
 					return true;
 				}
 			} else if (obj instanceof double[]) {
