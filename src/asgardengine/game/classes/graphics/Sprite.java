@@ -24,55 +24,84 @@ import asgardengine.utility.logging.LoggingHandler;
  */
 public class Sprite extends GameClass implements Drawable {
 	
-	public static final byte[] TYPE = {0, 1}; // an identifier for this class type
+	private static final byte[] TYPE = {0, 1}; // an identifier for this class type
 	public static final int cacheTime = 120000; // the time after which the preload image is discarded
 	
 	private File sprite = null; // store the sprite as path to save memory
 	private BufferedImage preload = null; // a preloaded version to enhance performance
-	private int scaleY = -1; // scaling disabled by default
-	private int scaleX = -1; // scaling disabled by default
+	private int scaleY = 0; // scaling disabled by default
+	private int scaleX = 0; // scaling disabled by default
+	private boolean scaling = false; // is the image scaled?
+	private int scaleDefaultY = 0; // default height
+	private int scaleDefaultX = 0; // default width
 	private Timer preloadTimer = new Timer(cacheTime, a -> this.unload()); // discard the preloaded image if not currently in use
 	
+	/**
+	 * Create a Sprite representing an image file.
+	 * 
+	 * @param classID - the unique ClassID of this Sprite
+	 * @param image - the image file of this Sprite
+	 */
 	public Sprite(ClassID classID, File image) {
 		super(classID);
-		this.sprite = image;
-		this.preloadTimer.setRepeats(false); // does not loop by default
+		this.setSprite(image);
+		this.init();
 	}
 	
+	/**
+	 * Create a Sprite representing an image file.
+	 * 
+	 * @param classID - the unique ClassID of this class
+	 * @param imagePath - the path to the image file of this Sprite
+	 */
 	public Sprite(ClassID classID, Path imagePath) {
 		super(classID);
 		this.setSprite(imagePath);
-		this.preloadTimer.setRepeats(false);
+		this.init();
 	}
 	
+	/**
+	 * Recreate a Sprite representing an image file from a previously saved array of bytes.
+	 * 
+	 * @param bytes - the byte array to recreate the Sprite from
+	 */
 	public Sprite(byte[] bytes) {
 		super(bytes);
 		this.createFromBytes(bytes);
-		this.preloadTimer.setRepeats(false);
+		this.init();
 	}
 	
-//	public Sprite clone() {
-//		Sprite clone = new Sprite(new File(this.sprite.getPath())); // create an independent file object
-//		if (preload != null) {
-//			clone.preload();
-//		}
-//		return clone;
-//	}
+	// do all this on construction
+	private void init() {
+		this.preloadTimer.setRepeats(false); // does not loop by default
+//		this.setDefaultImageSize(); // part of setSprite()
+	}
+	
+	// determine the default image size
+	private void setDefaultImageSize() {
+		if (this.sprite != null && this.sprite.isFile()) {
+			try {
+				BufferedImage bi = ImageIO.read(this.sprite);
+				this.scaleDefaultX = bi.getWidth();
+				this.scaleDefaultY = bi.getHeight();
+			} catch (Exception e) {
+				LoggingHandler.getLog().log(Level.SEVERE, "Sprite " + this.sprite + " could not be loaded.", e);
+				e.printStackTrace();
+			}
+		}
+	}
 
+	/**
+	 * Cache the BufferedImage of this Sprite.
+	 * 
+	 * @return - true if the Sprite was successfully cached as BufferedImage
+	 */
 	public boolean preload() {
 		if (this.sprite != null && this.sprite.isFile()) {
 			try {
 				this.preload = ImageIO.read(this.sprite);
-				if (this.scaleY >= 0 || this.scaleX >= 0) {
-					int x = this.preload.getWidth();
-					int y = this.preload.getHeight();
-					if (this.scaleY >= 0) {
-						y = this.scaleY;
-					}
-					if (this.scaleX >= 0) {
-						x = this.scaleX;
-					}					
-					this.preload = Drawable.resize(this.preload, x, y);
+				if (scaling) {					
+					this.preload = Drawable.resize(this.preload, this.scaleX, this.scaleY);
 				}
 				this.preloadTimer.restart();
 				return true;
@@ -84,6 +113,11 @@ public class Sprite extends GameClass implements Drawable {
 		return false;
 	}
 	
+	/**
+	 * Clear the cached BufferedImage.
+	 * 
+	 * @return - true if the cached BufferedImage was successfully cleared
+	 */
 	public boolean unload() {
 		if (this.preload != null) {
 			this.preload = null;
@@ -163,8 +197,11 @@ public class Sprite extends GameClass implements Drawable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Sprite && obj != null) {
-			return this.sprite.equals(((Sprite) obj).getSpriteFile());
-			// preload does not matter for equality
+			Sprite dummy = (Sprite) obj;
+			if (this.getHeight() == dummy.getHeight() && this.getWidth() == dummy.getWidth()) {
+				return this.sprite.equals(dummy.getSpriteFile());
+				// preload does not matter for equality
+			}
 		}
 		return false;
 	}
@@ -190,6 +227,11 @@ public class Sprite extends GameClass implements Drawable {
 	
 	// getters
 	
+	/**
+	 * Get the file that contains this sprite.
+	 * 
+	 * @return the image file of this sprite
+	 */
 	public File getSpriteFile() {
 		return this.sprite;
 	}
@@ -197,36 +239,113 @@ public class Sprite extends GameClass implements Drawable {
 	
 	// setters
 	
+	/**
+	 * Set the image file of this Sprite.
+	 * 
+	 * @param sprite - the Path to the Sprite image
+	 */
 	public void setSprite(Path sprite) {
 		if (sprite != null) {
 			this.sprite = sprite.toFile();
 		} else {
 			this.sprite = null;
 		}
+		this.setDefaultImageSize(); // determine the new default image size
 		if (preload != null) {
 			this.preload();
 		}
 	}
 	
+	/**
+	 * Set the image file of this Sprite.
+	 * 
+	 * @param sprite - the File of this Sprite
+	 */
 	public void setSprite(File sprite) {
 		this.sprite = sprite;
+		this.setDefaultImageSize(); // determine the new default image size
 		if (preload != null) {
 			this.preload();
 		}
 	}
 	
+	/**
+	 * Set the image file of this Sprite.
+	 * 
+	 * @param sprite - the path to the file of this Sprite as String
+	 */
 	public void setSprite(String sprite) {
 		this.sprite = new File(sprite);
+		this.setDefaultImageSize(); // determine the new default image size
 		if (preload != null) {
 			this.preload();
 		}
 	}
 	
+	/**
+	 * Set the scale of this sprite. If negative values are passed, the default scale is used.
+	 * 
+	 * @param width - the width to size this sprite to
+	 * @param height - the height to size this sprite to
+	 */
 	public void setScale(int width, int height) {
-		this.scaleY = height;
-		this.scaleX = width;
+		if (width >= 0 && height >= 0) {
+			if (width == this.scaleDefaultX && height == this.scaleDefaultY) {
+				this.scaling = false;
+			} else {
+				this.scaling = true;
+			}
+			this.scaleY = height;
+			this.scaleX = width;
+			if (this.preload != null) {
+				this.preload();
+			}
+		} else { // turn of scaling if negative values are passed
+			this.scaling = false;
+		}
+	}
+	
+	/**
+	 * Scale the image to the specified factor. If negative values are passed, the default scale is used.
+	 * 
+	 * @param factor - the factor to multiply the image height and width with
+	 */
+	public void setScale(double factor) {
+		if (factor != 1.0d && factor >= 0.0d) {
+			this.scaling = true;
+		} else {
+			this.scaling = false;
+		}
+		this.scaleY = (int) (this.scaleDefaultY * factor);
+		this.scaleX = (int) (this.scaleDefaultX * factor);
 		if (this.preload != null) {
 			this.preload();
+		}
+	}
+	
+	/**
+	 * Get the width of this sprite.
+	 * 
+	 * @return the width of this sprite as int
+	 */
+	public int getWidth() {
+		if (this.scaling) {
+			return this.scaleX;
+		} else {
+			return this.scaleDefaultX;
+		}
+	}
+	
+	/**
+	 * Get the height of this sprite.
+	 * 
+	 * @return the height of this sprite as int
+	 */
+	public int getHeight() {
+		if (this.scaling) {
+			return this.scaleY;
+		} else {
+			return this.scaleDefaultY;
 		}
 	}
 

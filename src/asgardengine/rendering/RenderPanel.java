@@ -2,6 +2,7 @@ package asgardengine.rendering;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -41,6 +42,9 @@ public class RenderPanel extends JPanel {
 	public Position screenCenter = new Position(300d, 300d, 0.0d);
 	public Position relativePosition = new Position();
 	
+	
+	private Placeable pov = null;
+	
 	public RenderPanel() {
 		this.test();
 	}
@@ -57,7 +61,7 @@ public class RenderPanel extends JPanel {
 			e.printStackTrace();
 		}
 		Sprite gf = new Sprite(ggf);
-		System.out.println(gf.getSpriteFile());
+		System.out.println(gf);
 		
 	//	Sprite s = new Sprite(new ClassID(b, a), new File("Test//flygon.gif"));
 //		Sprite gf = new Sprite(new ClassID(b, a), new File("Test//golbat.png"));
@@ -95,8 +99,10 @@ public class RenderPanel extends JPanel {
 		DirectionalAnimation hero_jump = new DirectionalAnimation(ClassHandler.nextID(index), hero_jump_front, null, null, null);
 		Actor hero = new Actor(ClassHandler.nextID(index));
 		hero.setJumpAnimation(hero_jump);
+		hero.setActorSprite(heroFront);
 		hero.setIdle(heroSprite);
 		ActorEntity heroRef = new ActorEntity(EntityHandler.nextID(), hero);
+		System.out.println("GG: " + heroFront.getHeight());
 		//		try {
 //			FileOutputStream fos = new FileOutputStream(new File("Test//a.sp"));
 //			try {
@@ -161,6 +167,7 @@ public class RenderPanel extends JPanel {
 		testPlace.add(poolE, 500, 500, 0);
 		testPlace.add(golbatRef, 300, 300, 0);
 		golbatFRef = golbatRef;
+		this.pov = heroRef;
 		this.addKeyListener(new PlayerControlHandler(heroRef));
 		relativePosition = Position.subtract(heroRef.getPosition(), screenCenter);
 	}
@@ -175,35 +182,24 @@ public class RenderPanel extends JPanel {
 	}
 	
 	private void render(Graphics2D g){
-		((Graphics2D) g).drawImage(testPlace.getBackground().toBufferedImage(), 0, 0, null);
-		Position pos = null;
-		relativePosition = Position.subtract(golbatFRef.getPosition(), screenCenter);
-		for (Drawable d : testPlace.getDrawables()) {
-			pos = Position.subtract(((Placeable) d).getPosition(), this.relativePosition);
-			((Graphics2D) g).drawImage(d.toBufferedImage(),(int) pos.getX(), (int) pos.getY(), null);
+		if (this.getPOV() != null) {
+			((Graphics2D) g).drawImage(testPlace.getBackground().toBufferedImage(), 0, 0, null);
+			Position pos = null;
+			relativePosition = Position.subtract(this.pov.getPosition(), screenCenter);
+			for (Drawable d : testPlace.getDrawables()) {
+				pos = Position.subtract(((Placeable) d).getPosition(), this.relativePosition);
+				((Graphics2D) g).drawImage(d.toBufferedImage(),(int) pos.getX(), (int) pos.getY(), null);
+			}
 		}
 		g.dispose();
 	}
-	
-	public void moveUp() {
-		h-= 1;
-		golbatFRef.getPosition().setY(h);
-		golbatFRef.getRotation().setRotation(0);
+
+	public Placeable getPOV() {
+		return this.pov;
 	}
-	public void moveDown() {
-		h++;
-		golbatFRef.getPosition().setY(h);
-		golbatFRef.getRotation().setRotation(180);
-	}
-	public void moveRight() {
-		w++;
-		golbatFRef.getPosition().setX(w);
-		golbatFRef.getRotation().setRotation(90);
-	}
-	public void moveLeft() {
-		w--;
-		golbatFRef.getPosition().setX(w);
-		golbatFRef.getRotation().setRotation(270);
+
+	public void setPOV(Placeable pov) {
+		this.pov = pov;
 	}
 	
 }

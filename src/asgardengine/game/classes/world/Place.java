@@ -8,6 +8,8 @@ import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.entities.actors.ActorEntity;
 import asgardengine.game.entities.world.TileEntity;
+import asgardengine.main.AsgardMain;
+import asgardengine.utility.quadtree.Quadtree;
 
 /**
  * The Place class contains Placeables to display by the engine.
@@ -24,11 +26,8 @@ public class Place extends GameClass {
 	
 	private ArrayList<Placeable> placeables = new ArrayList<Placeable>(); // all placeable entities contained by the map
 	private ArrayList<Drawable> drawables = new ArrayList<Drawable>(); // all drawable entities
-	private Place north = null; // the place to the north of this one
-	private Place south = null; // the place to the south of this one
-	private Place west = null; // the place to the west of this one
-	private Place east = null; // the place to the east of this one
 	private Sprite background = null; // the background of the place
+	private Quadtree tree = null;
 
 //	private ArrayList<TileEntity> superTiles = new ArrayList<TileEntity>(); // all static tiles
 	private ArrayList<TileEntity> statics = new ArrayList<TileEntity>(); // all static tiles
@@ -147,12 +146,10 @@ public class Place extends GameClass {
 	}
 	
 	public ArrayList<Drawable> getDrawables() {
-//		ArrayList<Drawable> drawables = new ArrayList<Drawable>();
-//		for (Placeable d: this.placeables) {
-//			if (d instanceof Drawable) {
-//				drawables.add((Drawable) d);
-//			}
-//		}
+		this.tree = new Quadtree(10000, 100, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition(), new Position(AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getX() - 1920, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getY() - 1080, 0));
+		for (Placeable d: this.placeables) {
+			this.tree.add(d);
+		}
 		return drawables;
 	}
 	

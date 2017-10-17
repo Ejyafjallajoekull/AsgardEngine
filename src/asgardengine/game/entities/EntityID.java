@@ -12,7 +12,7 @@ public class EntityID extends BaseID {
 	
 	@Override
 	public byte[] toByte() {
-		return this.getID().clone();
+		return this.getID();
 	}
 
 }

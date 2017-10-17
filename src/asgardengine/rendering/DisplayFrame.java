@@ -22,5 +22,9 @@ public class DisplayFrame extends JFrame {
 		renderer.screenCenter.setCoordinates(this.getWidth()/2, this.getHeight()/2, 0);
 		renderer.repaint();
 	}
+
+	public RenderPanel getRenderer() {
+		return renderer;
+	}
 	
 }

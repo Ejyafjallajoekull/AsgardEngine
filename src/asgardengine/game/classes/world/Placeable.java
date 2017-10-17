@@ -1,5 +1,7 @@
 package asgardengine.game.classes.world;
 
+import java.awt.Rectangle;
+
 /**
  * The Placeable interface provides access to basic 2D(/3D) world placement behaviour.
  * 
@@ -35,5 +37,26 @@ public interface Placeable {
 	 * @param rotation - the Rotation1D to set
 	 */
 	public void setRotation(Rotation1D rotation);
+	
+	/**
+	 * Get a rectangular bound of this object.
+	 * 
+	 * @return a Rectangle representing the boundaries of this object
+	 */
+	public Rectangle getBounds();
+	
+	/**
+	 * Get the width of the objects boundary.
+	 * 
+	 * @return the width of the object as double
+	 */
+	public double getWidth();
+	
+	/**
+	 * Get the height of the objects boundary.
+	 * 
+	 * @return the height of the object as double
+	 */
+	public double getHeight();
 
 }

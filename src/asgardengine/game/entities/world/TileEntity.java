@@ -1,6 +1,7 @@
 package asgardengine.game.entities.world;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
@@ -10,12 +11,15 @@ import javax.swing.Timer;
 
 import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Drawable;
+import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Placeable;
 import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.classes.world.Tile;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
+import asgardengine.game.entities.graphics.AnimationEntity;
+import asgardengine.game.handler.EntityHandler;
 import asgardengine.utility.logging.LoggingHandler;
 
 public class TileEntity extends GameEntity implements Drawable, Placeable {
@@ -26,11 +30,12 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 	public static final int cacheTime = 120000; // the time after which the preload image is discarded
 	private Timer cacheTimer = new Timer(cacheTime, a -> this.unload()); // discard the preloaded image if not currently in use
 	private BufferedImage cache = null; // a preloaded version to enhance performance
-
+	private AnimationEntity currentAnimation = null;
 	
 	public TileEntity(EntityID entityID, Tile tile) {
 		super(entityID);
 		this.tile = tile;
+		this.initAnimation();
 	}
 
 	public TileEntity(byte[] bytes) {
@@ -38,15 +43,26 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 		// TODO Auto-generated constructor stub
 	}
 	
+	// create an Entity for the animation and play it
+	private void initAnimation() {
+		if (this.tile != null && this.tile.getAnimation() != null) {
+			this.currentAnimation = new AnimationEntity(EntityHandler.nextID(), this.tile.getAnimation());
+			this.currentAnimation.play();
+		}
+	}
+	
 	public boolean cache() {
 		if (this.tile != null) {
-			if (this.getRotation().asDegrees() != 0.0d) {
-				this.cache = Drawable.rotate(this.tile.toBufferedImage(), this.getRotation().asRadians());
-			} else {
-				this.cache = this.tile.toBufferedImage();
+			Sprite s = this.getSprite();
+			if (s != null) {
+				if (this.getRotation().asDegrees() != 0.0d) {
+					this.cache = Drawable.rotate(s.toBufferedImage(), this.getRotation().asRadians());
+				} else {
+					this.cache = s.toBufferedImage();
+				}
+				this.cacheTimer.restart();
+				return true;	
 			}
-			this.cacheTimer.restart();
-			return true;
 		}
 		return false;
 	}
@@ -65,6 +81,19 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * Get the current state of this Tile as a Sprite.
+	 * 
+	 * @return the current state of this Tile as a Sprite
+	 */
+	public Sprite getSprite() {
+		if (this.currentAnimation != null && (this.currentAnimation.isPlayed() || this.getSprite() == null)) {
+			return this.currentAnimation.getSprite();
+		} else {
+			return this.tile.getSprite();
 		}
 	}
 
@@ -118,6 +147,22 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle((int) this.getPosition().getX(), (int) this.getPosition().getY(), (int) this.getWidth(), (int) this.getHeight());
+	}
+
+	@Override
+	public double getWidth() {
+		//TODO: optimise: cache, null check,...
+		return this.getSprite().getWidth();
+	}
+
+	@Override
+	public double getHeight() {
+		return this.getSprite().getHeight();
 	}
 
 }

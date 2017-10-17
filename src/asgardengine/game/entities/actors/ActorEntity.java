@@ -1,5 +1,6 @@
 package asgardengine.game.entities.actors;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Timer;
@@ -151,18 +152,28 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 		this.isRunning = isRunning;
 	}
 
-//	@Override
-//	public boolean didPlaceChange() {
-//		if () {
-//			
-//		}
-//		return false;
-//	}
+	@Override
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return new Rectangle((int) this.getPosition().getX(), (int) this.getPosition().getY(), (int) this.getWidth(), (int) this.getHeight());
+	}
 
-//	@Override
-//	public boolean didDrawingChange() {
-//		// TODO Auto-generated method stub
-//		return true;
-//	}
+	@Override
+	public double getWidth() {
+		if (this.getSource() != null && this.getSource().getActorSprite() != null) {
+			return this.actor.getActorSprite().getWidth();	
+		} else {
+			return 0.0d;
+		}
+	}
+
+	@Override
+	public double getHeight() {
+		if (this.getSource() != null && this.getSource().getActorSprite() != null) {
+			return this.actor.getActorSprite().getHeight();	
+		} else {
+			return 0.0d;
+		}
+	}
 
 }

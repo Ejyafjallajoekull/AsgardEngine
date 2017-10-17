@@ -16,7 +16,7 @@ import asgardengine.game.classes.graphics.Sprite;
  */
 public class Tile extends GameClass implements Drawable {
 	
-	public static final byte[] TYPE = {0, 3};
+	private static final byte[] TYPE = {0, 3};
 	private Animation animation = null;
 	private Sprite basicSprite = null;
 	
@@ -52,12 +52,11 @@ public class Tile extends GameClass implements Drawable {
 
 	@Override
 	public BufferedImage toBufferedImage() {
-		// TODO Auto-generated method stub
 		return this.basicSprite.toBufferedImage();
 	}
 
 	/**
-	 * Get if the appearance of this Tile will change at runtime.
+	 * Get if the position of this Tile will change at runtime.
 	 * 
 	 * @return true if this Tile is static
 	 */
@@ -66,12 +65,55 @@ public class Tile extends GameClass implements Drawable {
 	}
 
 	/**
-	 * Set if the appearance of this Tile will change at runtime.
+	 * Set if the position of this Tile will change at runtime.
 	 * 
 	 * @param isStatic - true if this Tile is static
 	 */
 	public void setStatic(boolean isStatic) {
 		this.isStatic = isStatic;
+	}
+	
+	/**
+	 * Get if this Tile supports supertiling, which means it does not change at runtime.
+	 * 
+	 * @return true if this Tile supports supertiling
+	 */
+	public boolean supportsSupertiling() {
+		if (this.isStatic && this.animation == null) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if this Tile is animated.
+	 * 
+	 * @return true if this Tile has an Animation assigned
+	 */
+	public boolean isAnimated() {
+		if (this.animation != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Get the Animation assigned to this Tile.
+	 * 
+	 * @return the Animation assigned to this Tile
+	 */
+	public Animation getAnimation() {
+		return this.animation;
+	}
+	
+	/**
+	 * Get the basic defined Sprite for this Tile. This will not consider animations.
+	 * 
+	 * @return the basic Sprite attached to this Tile
+	 */
+	public Sprite getSprite() {
+		return this.basicSprite;
 	}
 
 }

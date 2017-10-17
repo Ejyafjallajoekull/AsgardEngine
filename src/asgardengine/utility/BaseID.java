@@ -5,12 +5,32 @@ import java.util.Arrays;
 import asgardengine.utility.binary.ByteUtilities;
 import asgardengine.utility.binary.Hexadecimal;
 
+/**
+ * The BaseID class represents an binary identifier. 
+ * 
+ * @author Planters
+ *
+ */
 public abstract class BaseID {
 
-	int length = 0;
-	public static final byte FILLER = (byte) 0; // the byte to fill arrays, which are too short
+	private int length = 0;
 	private byte[] iD = new byte[this.length]; // the ID of the entity
+
+	/**
+	 * The FILLER constant is a byte value to fill the ID byte array if the initially 
+	 * specified array is to short to meet the length requirement.
+	 */
+	public static final byte FILLER = (byte) 0; // the byte to fill arrays, which are too short
 	
+	/**
+	 * Create a BaseID of the specified length from the given byte array.
+	 * If the byte array is longer than specified only the first elements are used.
+	 * If the byte array is shorter than specified it will be filled with the byte value
+	 * specified by the FILLER constant.
+	 * 
+	 * @param length - the length of the identification array
+	 * @param bytes - the array to represent the ID
+	 */
 	public BaseID(int length, byte[] bytes) {
 		if (length >= 0) {
 			this.length = length;
@@ -18,8 +38,23 @@ public abstract class BaseID {
 		this.iD = fill(this.length, bytes);
 	}
 
+	/**
+	 * Convert this ID to its' binary representation.
+	 * 
+	 * @return the binary representation of this ID as byte array
+	 */
 	public abstract byte[] toByte();
 	
+	/**
+	 * Fill a byte array of the specified length with the given byte array.
+	 * If the byte array is longer than specified only the first elements are used.
+	 * If the byte array is shorter than specified it will be filled with leading byte values
+	 * specified by the FILLER constant.
+	 * 
+	 * @param length - the length of the array to fill
+	 * @param bytes - the byte array to use as base
+	 * @return a byte array of the given length based on the input array
+	 */
 	public static byte[] fill(int length, byte[] bytes) {
 		if (length > 0) {
 			byte[] b = new byte[length]; 
@@ -40,6 +75,11 @@ public abstract class BaseID {
 		return new byte[0];
 	}
 	
+	/**
+	 * Get the binary identification array.
+	 * 
+	 * @return a byte array that is a copy of internal one
+	 */
 	public byte[] getID() {
 		return this.iD.clone();
 	}
@@ -68,4 +108,5 @@ public abstract class BaseID {
 	public String toString() {
 		return Hexadecimal.toHex(this.toByte());
 	}
+	
 }

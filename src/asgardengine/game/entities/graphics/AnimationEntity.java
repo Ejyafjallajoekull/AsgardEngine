@@ -89,43 +89,48 @@ public class AnimationEntity extends GameEntity implements Drawable {
 			return null;
 		}
 	}
-
-	@Override
-	public BufferedImage toBufferedImage() {
+	
+	/**
+	 * Get the currently displayed sprite of this animation entity.
+	 * 
+	 * @return the current state of this animation entity as a Sprite
+	 */
+	public Sprite getSprite() {
 		if (this.animation != null) {
-			Sprite s = null;
 			if (!this.animation.isLoop() && (System.nanoTime() - this.start) > this.animation.getPlaybackLength()) { // if the animation is not supposed to loop stop it at the appropriate time
 				this.stop();
 			}
 			if (this.isPlayed) { // only do this if the animation gets currently played
-				s = this.animation.get(System.nanoTime() - this.start); // get the currently played sprite
+				return this.animation.get(System.nanoTime() - this.start); // get the currently played sprite
 			} else if (this.animation.hasSprites()) { // only take the first if it really exists
-				s = this.animation.getAt(0);
-			}
-			if (s != null) {
-				return s.toBufferedImage();
+				return this.animation.getAt(0);
 			}
 		}
 		return null;
 	}
 
-//	@Override
-//	public byte[] getType() {
-//		return Animation.TYPE; // same as the corresponding class
-//	}
+	@Override
+	public BufferedImage toBufferedImage() {
+		Sprite s = this.getSprite();
+		if (s != null) {
+			return s.toBufferedImage();
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public GameClass getSource() {
-		return animation;
+		return this.animation;
 	}
 
+	/**
+	 * Check whether this animation is currently playing.
+	 * 
+	 * @return true if the animation is currently playing
+	 */
 	public boolean isPlayed() {
-		return isPlayed;
+		return this.isPlayed;
 	}
-
-//	@Override
-//	public boolean didDrawingChange() {
-//		return true;
-//	}
 
 }

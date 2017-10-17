@@ -91,4 +91,9 @@ public abstract class GameClass {
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClassID() + ":" + this.getDescriptiveName();
+	}
+	
 }
