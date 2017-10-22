@@ -2,17 +2,15 @@ package asgardengine.rendering;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
-import asgardengine.game.classes.characters.Actor;
+import asgardengine.game.classes.actors.Actor;
 import asgardengine.game.classes.graphics.Animation;
 import asgardengine.game.classes.graphics.DirectionalAnimation;
 import asgardengine.game.classes.graphics.DirectionalSprite;
@@ -21,9 +19,8 @@ import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
 import asgardengine.game.classes.world.Position;
-import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.classes.world.Tile;
-import asgardengine.game.entities.EntityID;
+import asgardengine.game.classes.world.placetree.PlaceTree;
 import asgardengine.game.entities.actors.ActorEntity;
 import asgardengine.game.entities.world.TileEntity;
 import asgardengine.game.handler.ClassHandler;
@@ -41,6 +38,8 @@ public class RenderPanel extends JPanel {
 //	public Timer timer = new Timer(1000/240, l -> {this.repaint();});
 	public Position screenCenter = new Position(300d, 300d, 0.0d);
 	public Position relativePosition = new Position();
+	public ArrayList<TileEntity> rocks = new ArrayList<TileEntity>(); // testing
+	public boolean breakExec = true; // testing
 	
 	
 	private Placeable pov = null;
@@ -52,6 +51,9 @@ public class RenderPanel extends JPanel {
 	public void test() {
 		LoggingHandler.startLogWriting();
 		byte[] index = {0,0};
+		if (breakExec) {
+			throw new NullPointerException("Break!");
+		}
 		byte[] ggf = null;
 		try {
 //			gf = new Sprite(Files.readAllBytes((new File("Test//a.sp")).toPath()));
@@ -149,6 +151,9 @@ public class RenderPanel extends JPanel {
 		int x = 0;
 		int y = 0;
 		TileEntity grassE01 = null;
+		rockTile01.setZHeight(5.0d);
+//		rock01.setScale(5);
+		hero.setSteppingHeight(0.5d);
 		for (int i = 0; i < 8100; i++) {
 			grassE01 = new TileEntity(EntityHandler.nextID(), grassTile01);
 			testPlace.add(grassE01, x, y, 0);
@@ -159,7 +164,8 @@ public class RenderPanel extends JPanel {
 				x += 15;
 			}
 			if (rr.nextInt(1000) < 1) {
-				testPlace.add(new TileEntity(EntityHandler.nextID(), rockTile01), rr.nextInt(x), rr.nextInt(y), 0);
+				this.rocks.add(new TileEntity(EntityHandler.nextID(), rockTile01));
+				testPlace.add(this.rocks.get(this.rocks.size() - 1), rr.nextInt(x), rr.nextInt(y), 0);
 			}
 		}
 		TileEntity poolE = new TileEntity(EntityHandler.nextID(), poolTile01);
@@ -189,6 +195,11 @@ public class RenderPanel extends JPanel {
 			for (Drawable d : testPlace.getDrawables()) {
 				pos = Position.subtract(((Placeable) d).getPosition(), this.relativePosition);
 				((Graphics2D) g).drawImage(d.toBufferedImage(),(int) pos.getX(), (int) pos.getY(), null);
+//				((Graphics2D) g).drawImage(d.toBufferedImage(),(int) ((Placeable) d).getPosition().getX(), (int) ((Placeable) d).getPosition().getY(), null);
+
+//				if (d == pov || this.rocks.contains(d)) {
+//					((Graphics2D) g).fill(((Placeable) d).getBounds());
+//				}
 			}
 		}
 		g.dispose();

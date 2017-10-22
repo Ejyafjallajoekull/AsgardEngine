@@ -40,18 +40,53 @@ public class Rotation1D {
 		}
 	}
 	
+	/**
+	 * Get this objects rotation in degrees.
+	 * 
+	 * @return this objects rotation value in degrees
+	 */
 	public double asDegrees() {
 		return this.rotation;
 	}
 	
+	/**
+	 * Get this objects rotation in radians.
+	 * 
+	 * @return this objects rotation value in radians
+	 */
 	public double asRadians() {
 		return Math.toRadians(this.rotation);
 	}
 	
+	/**
+	 * Set the rotation of this object in degrees.
+	 * 
+	 * @param degrees - the degrees to set the rotation to
+	 */
 	public void setRotation(double degrees) {
 		this.rotation = normalise(degrees);
 	}
 	
+	/**
+	 * Set the rotation of this object either in degrees or radians.
+	 * 
+	 * @param rotation - the value of the rotation
+	 * @param rad - true to process the value as radians, false to process them as degrees
+	 */
+	public void setRotation(double rotation, boolean rad) {
+		if (rad) {
+			this.rotation = Math.toRadians(rotation);
+		} else {
+			this.rotation = rotation;
+		}
+	}
+	
+	/**
+	 * Normalise an arbitrary degrees value to a positive scale ranging from 0° to 360°, excluding the latter.
+	 * 
+	 * @param degrees - the degrees value to normalise
+	 * @return a normalised degrees value as double
+	 */
 	public static double normalise(double degrees) {
 		double transform = degrees%360;
 		if (degrees < 0) {

@@ -19,7 +19,7 @@ public class Tile extends GameClass implements Drawable {
 	private static final byte[] TYPE = {0, 3};
 	private Animation animation = null;
 	private Sprite basicSprite = null;
-	
+	private double zHeight = 0.0d;
 	private boolean isStatic = false; // will the appearance of this tile change at runtime
 	
 
@@ -114,6 +114,26 @@ public class Tile extends GameClass implements Drawable {
 	 */
 	public Sprite getSprite() {
 		return this.basicSprite;
+	}
+	
+	/**
+	 * Get the Z-Height of this Tile. This value represents its' scale
+	 * in Z-dimension in a three dimensional environment.
+	 * 
+	 * @return the Z-height of this Tile as double
+	 */
+	public void setZHeight(double zHeight) {
+		this.zHeight = zHeight;
+	}
+	
+	/**
+	 * Set the Z-Height of this Tile. This value represents its' scale
+	 * in Z-dimension in a three dimensional environment.
+	 * 
+	 * @param zHeight - the scale of this Tile in Z-dimension
+	 */
+	public double getZHeight() {
+		return this.zHeight;
 	}
 
 }

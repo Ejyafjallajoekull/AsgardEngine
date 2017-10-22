@@ -156,13 +156,31 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 
 	@Override
 	public double getWidth() {
-		//TODO: optimise: cache, null check,...
-		return this.getSprite().getWidth();
+		Sprite s = this.getSprite();
+		if (s != null) {
+			return this.getSprite().getWidth();
+		} else {
+			return 0.0d;
+		}
 	}
 
 	@Override
 	public double getHeight() {
-		return this.getSprite().getHeight();
+		Sprite s = this.getSprite();
+		if (s != null) {
+			return this.getSprite().getHeight();
+		} else {
+			return 0.0d;
+		}
+	}
+
+	@Override
+	public double getZHeight() {
+		if (this.getSource() != null) {
+			return this.getSource().getZHeight();
+		} else {
+			return 0.0d;
+		}
 	}
 
 }

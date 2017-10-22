@@ -1,6 +1,6 @@
 package asgardengine.game.classes.world;
 
-import java.awt.Rectangle;
+import asgardengine.utility.quadtree.RectangularBound;
 
 /**
  * The Placeable interface provides access to basic 2D(/3D) world placement behaviour.
@@ -43,10 +43,11 @@ public interface Placeable {
 	 * 
 	 * @return a Rectangle representing the boundaries of this object
 	 */
-	public Rectangle getBounds();
+	public RectangularBound getBounds();
 	
 	/**
 	 * Get the width of the objects boundary.
+	 * This equals the X-scale.
 	 * 
 	 * @return the width of the object as double
 	 */
@@ -54,9 +55,18 @@ public interface Placeable {
 	
 	/**
 	 * Get the height of the objects boundary.
+	 * This equals the Y-scale.
 	 * 
 	 * @return the height of the object as double
 	 */
 	public double getHeight();
+	
+	/**
+	 * Get the Z-height of the object.
+	 * This equals the Z-scale.
+	 * 
+	 * @return the Z-height of the object as double
+	 */
+	public double getZHeight();
 
 }

@@ -20,6 +20,7 @@ public class Position {
 	private double moveY = 0.0d;
 	private double moveZ = 0.0d;
 	private long movementStart = -1l;
+//	private Position end = null;
 	
 	/**
 	 * Create a new three dimensional vector with the coordinates {0, 0, 0}.
@@ -303,6 +304,27 @@ public class Position {
 		return distance(this, vector);
 	}
 	
+	/**
+	 * Get the unit vector of this Position vector.
+	 * 
+	 * @return the unit vector of the input vector as Position 
+	 */
+	public Position unitVector() {
+		return Position.unitVector(this);
+	}
+	
+	/**
+	 * Returns the angle theta between this and the specified Position vector 
+	 * either in degrees or radians.
+	 * 
+	 * @param vector - the Position vector to calculate the angle against
+	 * @param degrees - true to return the angle in degrees, false to return the angle in radians
+	 * @return the angle between the Position vectors as double
+	 */
+	public double angle(Position vector, boolean degrees) {
+		return Position.angle(this, vector, degrees);
+	}
+	
 	// update the coordinates of this Position vector if it is currently moving
 	private void updateCoordinates() {
 		if (this.isMoving()) {
@@ -472,6 +494,42 @@ public class Position {
 				return 0.0d;
 			}
 		}
+	}
+	
+	/**
+	 * Get the unit vector of the specified Position vector.
+	 * 
+	 * @param vector - the vector to get the unit vector from
+	 * @return the unit vector of the input vector as Position 
+	 */
+	public static Position unitVector(Position vector) {
+		if (vector != null) {
+			return Position.divide(vector, vector.amount());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns the angle theta between the specified Position vectors either in degrees 
+	 * or radians.
+	 * 
+	 * @param vector1 - the first Position vector
+	 * @param vector2 - the second Position vector
+	 * @param degrees - true to return the angle in degrees, false to return the angle in radians
+	 * @return the angle between the specified Position vectors as double
+	 */
+	public static double angle(Position vector1, Position vector2, boolean degrees) {
+		if (vector1 != null && vector2 != null) {
+			double angle = Math.acos(vector1.scalarProduct(vector2)/(vector1.amount()*vector2.amount())); // radians
+			if (degrees) { // return the angle in degrees
+				return Rotation1D.normalise(Math.toDegrees(angle)); // normalise the angle to 0 - 360° before returning
+			} else { // return the angle in radians
+				return angle;
+			}
+		} else {
+			return 0.0d;
+		}	
 	}
 	
 	@Override

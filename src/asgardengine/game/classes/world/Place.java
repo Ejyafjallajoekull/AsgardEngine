@@ -27,7 +27,7 @@ public class Place extends GameClass {
 	private ArrayList<Placeable> placeables = new ArrayList<Placeable>(); // all placeable entities contained by the map
 	private ArrayList<Drawable> drawables = new ArrayList<Drawable>(); // all drawable entities
 	private Sprite background = null; // the background of the place
-	private Quadtree tree = null;
+	public static Quadtree tree = null; // just testing
 
 //	private ArrayList<TileEntity> superTiles = new ArrayList<TileEntity>(); // all static tiles
 	private ArrayList<TileEntity> statics = new ArrayList<TileEntity>(); // all static tiles
@@ -146,9 +146,9 @@ public class Place extends GameClass {
 	}
 	
 	public ArrayList<Drawable> getDrawables() {
-		this.tree = new Quadtree(10000, 100, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition(), new Position(AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getX() - 1920, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getY() - 1080, 0));
+		Place.tree = new Quadtree(10000, 100, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition(), new Position(AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getX() - 1920, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getY() - 1080, 0));
 		for (Placeable d: this.placeables) {
-			this.tree.add(d);
+			Place.tree.add(d);
 		}
 		return drawables;
 	}
