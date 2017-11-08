@@ -42,4 +42,13 @@ public abstract class GameEntity {
 		return false;
 	}
 	
+	@Override
+	public int hashCode() {
+		if (this.getEntityID() != null) {
+			return this.getEntityID().hashCode();
+		} else {
+			return 0;
+		}
+	}
+	
 }

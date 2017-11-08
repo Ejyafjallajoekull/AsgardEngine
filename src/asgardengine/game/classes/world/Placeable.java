@@ -1,5 +1,8 @@
 package asgardengine.game.classes.world;
 
+import asgardengine.game.classes.graphics.Drawable;
+import asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgardengine.game.entities.world.PlaceEntity;
 import asgardengine.utility.quadtree.RectangularBound;
 
 /**
@@ -8,7 +11,7 @@ import asgardengine.utility.quadtree.RectangularBound;
  * @author Planters
  *
  */
-public interface Placeable {
+public interface Placeable extends Drawable{
 	
 	/**
 	 * Get the position of the object.
@@ -68,5 +71,38 @@ public interface Placeable {
 	 * @return the Z-height of the object as double
 	 */
 	public double getZHeight();
+	
+	/**
+	 * Get the cell this object is currently registered in.
+	 * The cell needs to be updated on a regular basis for moving objects.
+	 * 
+	 * @return the cell this object is registered in as PlaceTreeCell
+	 */
+	public PlaceTreeCell getCell();
+	
+	/**
+	 * Set the cell this object is currently registered in.
+	 * This needs to be updated on a regular basis for moving objects.
+	 *
+	 * @param cell - the PlaceTreeCell to register this object in
+	 */
+	public void setCell(PlaceTreeCell cell);
+	
+	/**
+	 * Set the PlaceEntity this object is currently registered in.
+	 *
+	 * @param place - the PlaceEntity to register this object in
+	 */
+	public void setPlace(Place place);
+	
+	public Place getPlace();
+	
+	/**
+	 * Removes the Placeable from the Place and cell it is currently registered in.
+	 * 
+	 * @return true if the removal was successful
+	 */
+	public boolean removeFromPlace();
+	
 
 }

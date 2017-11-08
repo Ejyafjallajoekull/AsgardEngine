@@ -1,15 +1,9 @@
 package asgardengine.game.classes.world;
 
-import java.util.ArrayList;
-
 import asgardengine.game.classes.ClassID;
 import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
-import asgardengine.game.entities.actors.ActorEntity;
-import asgardengine.game.entities.world.TileEntity;
-import asgardengine.main.AsgardMain;
-import asgardengine.utility.quadtree.Quadtree;
+import asgardengine.game.classes.world.placetree.PlaceTree;
 
 /**
  * The Place class contains Placeables to display by the engine.
@@ -20,30 +14,34 @@ import asgardengine.utility.quadtree.Quadtree;
 public class Place extends GameClass {
 
 	public static final byte[] TYPE = {0, 4};
-	public static final int PLACE_HEIGTH = 2000;
-	public static final int PLACE_WIDTH = 4000;
-	public static final int SUPERTILING_SIZE = 256;
+	public static final double CELL_SIZE_X = 3000.0d;
+	public static final double CELL_SIZE_Y = 2000.0d;
+	public static final double CELL_SIZE_Z = 500.0d;
+	public static final int SUPERTILING_SIZE = 256; // TODO: supertiling
 	
-	private ArrayList<Placeable> placeables = new ArrayList<Placeable>(); // all placeable entities contained by the map
-	private ArrayList<Drawable> drawables = new ArrayList<Drawable>(); // all drawable entities
+	private PlaceTree cellTree = new PlaceTree(Place.CELL_SIZE_X, Place.CELL_SIZE_Y, Place.CELL_SIZE_Z);
+	
 	private Sprite background = null; // the background of the place
-	public static Quadtree tree = null; // just testing
-
-//	private ArrayList<TileEntity> superTiles = new ArrayList<TileEntity>(); // all static tiles
-	private ArrayList<TileEntity> statics = new ArrayList<TileEntity>(); // all static tiles
-	private ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all non static tiles
-	private ArrayList<ActorEntity> actors = new ArrayList<ActorEntity>(); // all actors
-//	private ArrayList<Item> items = new ArrayList<Item>(); // all drawable entities
 
 	
+	/**
+	 * Create a Place to hold different Placeables, which are GameEntities most of the time.
+	 * 
+	 * @param classID - the unique identifier for this Place
+	 */
 	public Place(ClassID classID) {
 		super(classID);
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Recreate a previously saved Place from an array of bytes.
+	 * 
+	 * @param bytes - the byte array to recreate this Place from
+	 */
 	public Place(byte[] bytes) {
 		super(bytes);
-		// TODO Auto-generated constructor stub
+		this.createFromBytes(bytes);
 	}
 
 	/**
@@ -53,48 +51,25 @@ public class Place extends GameClass {
 	 * @return true if the addition has been successful
 	 */
 	public boolean add(Placeable entity) {
-		if (entity != null) { // do not allow nulls
-			if (entity instanceof Drawable) {
-				this.drawables.add((Drawable) entity);
-			}
-			return this.placeables.add(entity);
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Add the specific TileEntity to the Place. <br>
-	 * Static and non-static Tiles will be treated separately.
-	 * 
-	 * @param tile - the TileEntity to add to the Place
-	 * @return true if the addition has been successful
-	 */
-	public boolean add(TileEntity tile) {
-		if (tile != null) { // do not allow nulls
-			if (tile.getSource().isStatic()) {
-				return this.statics.add(tile);
+		if (entity != null) {
+			boolean success = false;
+			if (entity.getPlace() != null) {
+				if (entity.getPlace() != this) {
+					success = this.cellTree.add(entity);
+					if (success) { // remove the entity if successful
+						entity.removeFromPlace();
+					}
+					entity.setPlace(this);
+				}
 			} else {
-				return this.tiles.add(tile);
+				success = this.cellTree.add(entity);
+				if (success) { // if the addition was successful set this as the new Place for this object
+					entity.setPlace(this);
+				}
 			}
-		} else {
-			return false;
+			return success;
 		}
-	}
-	
-	/**
-	 * Add the specific ActorEntity to the Place. <br>
-	 * Static and non-static Tiles will be treated separately.
-	 * 
-	 * @param actor - the ActorEntity to add to the Place
-	 * @return true if the addition has been successful
-	 */
-	public boolean add(ActorEntity actor) {
-		if (actor != null) { // do not allow nulls
-				return this.actors.add(actor);
-		} else {
-			return false;
-		}
+		return false;
 	}
 	
 	/**
@@ -107,10 +82,7 @@ public class Place extends GameClass {
 	public boolean add(Placeable entity, Position pos) {
 		if (entity != null && pos != null) {
 			entity.setPosition(pos);
-			if (entity instanceof Drawable) {
-				this.drawables.add((Drawable) entity);
-			}
-			return this.placeables.add(entity);
+			return this.add(entity);
 		} else {
 			return false;
 		}
@@ -128,7 +100,7 @@ public class Place extends GameClass {
 	public boolean add(Placeable entity, double x, double y, double z) {
 		if (entity != null) {
 			Position pos = entity.getPosition();
-			if (pos != null) {
+			if (pos == null) {
 				pos = new Position(x, y, z);
 			} else {
 				pos.setX(x);
@@ -136,25 +108,23 @@ public class Place extends GameClass {
 				pos.setZ(z);	
 			}
 			entity.setPosition(pos);
-			if (entity instanceof Drawable) {
-				this.drawables.add((Drawable) entity);
-			}
-			return this.placeables.add(entity);
+			return this.add(entity);
 		} else {
 			return false;
 		}
 	}
 	
-	public ArrayList<Drawable> getDrawables() {
-		Place.tree = new Quadtree(10000, 100, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition(), new Position(AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getX() - 1920, AsgardMain.main.getFrame().getRenderer().getPOV().getPosition().getY() - 1080, 0));
-		for (Placeable d: this.placeables) {
-			Place.tree.add(d);
+	/**
+	 * Remove the Placeable from this Place.
+	 * 
+	 * @param entity - the Placeable to remove from this Place
+	 * @return true if the removal was successful
+	 */
+	public boolean remove(Placeable entity) {
+		if (entity != null && entity.getPlace() == this) { // only do this if the entity is registered in this place
+			return entity.removeFromPlace();
 		}
-		return drawables;
-	}
-	
-	private void supertile() {
-		//TODO: implement supertiling
+		return false;
 	}
 	
 	@Override
@@ -174,24 +144,31 @@ public class Place extends GameClass {
 		return TYPE;
 	}
 
+	/**
+	 * Get the background Sprite for this Place.
+	 * 
+	 * @return the background of this Place as Sprite
+	 */
 	public Sprite getBackground() {
 		return this.background;
 	}
 
+	/**
+	 * Set the background Sprite for this Place.
+	 * 
+	 * @param background - the background Sprite to set
+	 */
 	public void setBackground(Sprite background) {
 		this.background = background;
 	}
 
-	public ArrayList<TileEntity> getStatics() {
-		return statics;
-	}
-
-	public ArrayList<TileEntity> getTiles() {
-		return tiles;
-	}
-
-	public ArrayList<ActorEntity> getActors() {
-		return actors;
+	/**
+	 * Get the cell tree organising all objects of a Place spatially.
+	 * 
+	 * @return the Places' organising cell tree as PlaceTreeCell
+	 */
+	public PlaceTree getCellTree() {
+		return cellTree;
 	}
 
 }

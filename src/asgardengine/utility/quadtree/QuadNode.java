@@ -1,9 +1,9 @@
 package asgardengine.utility.quadtree;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import asgardengine.game.classes.world.Placeable;
+import asgardengine.game.classes.world.Position;
 
 /**
  * The QuadNode class represents a node of a QuadTree.
@@ -17,10 +17,10 @@ public class QuadNode {
 	private ArrayList<Placeable> objects = null;
 	private int depth = 0;
 	private Quadtree source = null;
-	private Rectangle bounds = null;
+	private RectangularBound bounds = null;
 
 	
-	public QuadNode(int depth, Quadtree source, Rectangle space) {
+	public QuadNode(int depth, Quadtree source, RectangularBound space) {
 		this.depth = depth;
 		this.source = source;
 		this.bounds = space;
@@ -34,17 +34,17 @@ public class QuadNode {
 		if (!this.hasChildren()) {
 			subNodes = new QuadNode[4];
 			int depth = this.depth + 1;
-			int width = this.bounds.width / 2;
-			int heigth = this.bounds.height / 2;
-			subNodes[0] = new QuadNode(depth, this.source, new Rectangle(this.bounds.x, this.bounds.y, width, heigth));
-			subNodes[1] = new QuadNode(depth, this.source, new Rectangle(this.bounds.x, (int) this.bounds.getCenterY(), width, heigth));
-			subNodes[2] = new QuadNode(depth, this.source, new Rectangle((int) this.bounds.getCenterX(), this.bounds.y, width, heigth));
-			subNodes[3] = new QuadNode(depth, this.source, new Rectangle((int) this.bounds.getCenterX(), (int) this.bounds.getCenterY(), width, heigth));
-			ArrayList<Placeable> cache = this.objects; // cache the old list
-			this.objects = new ArrayList<Placeable>(source.getNodeThreshold() + 1); // create a new one
-			for (int i = 0; i < cache.size() ;i++) { // add all old elements to the new list and subnodes
-				this.add(cache.get(i));
-			}
+			double width = this.bounds.getWidth() * 0.5d;
+			double height = this.bounds.getHeight() * 0.5d;
+			subNodes[0] = new QuadNode(depth, this.source, new RectangularBound(new Position(this.bounds.getCenter().getX() - width*0.5d, this.bounds.getCenter().getY() + height*0.5d, this.bounds.getCenter().getZ()), width, height));
+			subNodes[1] = new QuadNode(depth, this.source, new RectangularBound(new Position(this.bounds.getCenter().getX() + width*0.5d, this.bounds.getCenter().getY() + height*0.5d, this.bounds.getCenter().getZ()), width, height));
+			subNodes[2] = new QuadNode(depth, this.source, new RectangularBound(new Position(this.bounds.getCenter().getX() + width*0.5d, this.bounds.getCenter().getY() - height*0.5d, this.bounds.getCenter().getZ()), width, height));
+			subNodes[3] = new QuadNode(depth, this.source, new RectangularBound(new Position(this.bounds.getCenter().getX() - width*0.5d, this.bounds.getCenter().getY() - height*0.5d, this.bounds.getCenter().getZ()), width, height));
+//			ArrayList<Placeable> cache = this.objects; // cache the old list
+//			this.objects = new ArrayList<Placeable>(source.getNodeThreshold() + 1); // create a new one
+//			for (int i = 0; i < cache.size() ;i++) { // add all old elements to the new list and subnodes
+//				this.add(cache.get(i));
+//			}
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class QuadNode {
 		}
 	}
 	
-	public ArrayList<Placeable> get(Rectangle targetSpace) {
+	public ArrayList<Placeable> get(RectangularBound targetSpace) {
 		if (targetSpace != null) {
 			ArrayList<Placeable> querry = new ArrayList<Placeable>();
 			querry.addAll(this.objects);
@@ -79,6 +79,10 @@ public class QuadNode {
 				int index = this.getIndex(targetSpace);
 				if (index >= 0) {
 					querry.addAll(this.subNodes[index].get(targetSpace));
+				} else if (index == -1) {
+					for (QuadNode node : this.subNodes) {
+						querry.addAll(node.get(targetSpace));
+					}
 				}
 			}
 			return querry;
@@ -100,8 +104,8 @@ public class QuadNode {
 	}
 	
 	// get the sub node index of the specified rectangle
-	private int getIndex(Rectangle r) {
-		int index = -1;
+	public int getIndex(RectangularBound r) {
+		int index = -2;
 		if (this.hasChildren()) {
 			for (int i = 0; i < this.subNodes.length; i++) {
 				if (this.subNodes[i].getBounds().intersects(r)) {
@@ -112,7 +116,7 @@ public class QuadNode {
 						break;
 					}
 				}
-			}	
+			}
 		}
 		return index;
 	}
@@ -133,8 +137,8 @@ public class QuadNode {
 		return source;
 	}
 
-	public Rectangle getBounds() {
-		return bounds;
+	public RectangularBound getBounds() {
+		return this.bounds;
 	}
 
 }

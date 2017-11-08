@@ -12,15 +12,18 @@ import javax.swing.Timer;
 import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
+import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
 import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.classes.world.Tile;
+import asgardengine.game.classes.world.placetree.PlaceTreeCell;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
 import asgardengine.game.entities.graphics.AnimationEntity;
 import asgardengine.game.handler.EntityHandler;
 import asgardengine.utility.logging.LoggingHandler;
+import asgardengine.utility.quadtree.RectangularBound;
 
 public class TileEntity extends GameEntity implements Drawable, Placeable {
 
@@ -31,6 +34,7 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 	private Timer cacheTimer = new Timer(cacheTime, a -> this.unload()); // discard the preloaded image if not currently in use
 	private BufferedImage cache = null; // a preloaded version to enhance performance
 	private AnimationEntity currentAnimation = null;
+	private Place currentPlace = null;
 	
 	public TileEntity(EntityID entityID, Tile tile) {
 		super(entityID);
@@ -150,8 +154,8 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 	}
 
 	@Override
-	public Rectangle getBounds() {
-		return new Rectangle((int) this.getPosition().getX(), (int) this.getPosition().getY(), (int) this.getWidth(), (int) this.getHeight());
+	public RectangularBound getBounds() {
+		return new RectangularBound(this.getPosition(), this.getWidth(), this.getHeight());
 	}
 
 	@Override
@@ -181,6 +185,34 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 		} else {
 			return 0.0d;
 		}
+	}
+
+	@Override
+	public PlaceTreeCell getCell() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCell(PlaceTreeCell cell) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPlace(Place place) {
+		this.currentPlace = place;
+	}
+
+	@Override
+	public Place getPlace() {
+		return this.currentPlace;
+	}
+
+	@Override
+	public boolean removeFromPlace() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

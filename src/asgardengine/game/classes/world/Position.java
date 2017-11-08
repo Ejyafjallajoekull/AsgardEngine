@@ -11,8 +11,6 @@ import java.util.Arrays;
  */
 public class Position {
 	
-	// TODO: add function such as degrees & movement & acceleration
-	
 	private double x = 0.0d;
 	private double y = 0.0d;
 	private double z = 0.0d;
@@ -325,6 +323,17 @@ public class Position {
 		return Position.angle(this, vector, degrees);
 	}
 	
+	/**
+	 * Treat this Position vector as line vector and get its' normal vector, 
+	 * either the left or the right one
+	 * 
+	 * @param leftNormal - true to return the left normal, false to return the right one
+	 * @return the normal vector of this vector as Position
+	 */
+	public Position normalVector(boolean leftNormal) {
+		return Position.normalVector(this, leftNormal);
+	}
+	
 	// update the coordinates of this Position vector if it is currently moving
 	private void updateCoordinates() {
 		if (this.isMoving()) {
@@ -530,6 +539,26 @@ public class Position {
 		} else {
 			return 0.0d;
 		}	
+	}
+	
+	/**
+	 * Get the normal vector of the specified line vector, 
+	 * either the left or the right one.
+	 * 
+	 * @param lineVector - the line vector Position to convert to its' normal vector
+	 * @param leftNormal - true to return the left normal, false to return the right one
+	 * @return the normal vector of the specified line vector as Position
+	 */
+	public static Position normalVector(Position lineVector, boolean leftNormal) {
+		if (lineVector != null) {
+			if (leftNormal) {
+				return new Position(lineVector.getY() * (-1.0d), lineVector.getX(), lineVector.getZ());
+			} else {
+				return new Position(lineVector.getY(), lineVector.getX() * (-1.0d), lineVector.getZ());
+			}
+		} else {
+			return null;
+		}
 	}
 	
 	@Override

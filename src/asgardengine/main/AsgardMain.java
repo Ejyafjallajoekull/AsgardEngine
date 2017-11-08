@@ -60,7 +60,7 @@ public class AsgardMain implements Runnable {
 				}
 				this.currentFPS++;
 				if (this.currentFPS >= 60) {
-					System.out.println("FPS: " + this.currentFPS/(fpsTime/1000000000d));
+//					System.out.println("FPS: " + this.currentFPS/(fpsTime/1000000000d));
 					this.currentFPS = 0;
 					fpsTime = 0;
 				}

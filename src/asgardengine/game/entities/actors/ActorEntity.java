@@ -1,6 +1,5 @@
 package asgardengine.game.entities.actors;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -14,15 +13,19 @@ import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
 import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
+import asgardengine.game.classes.world.placetree.PlaceTreeCell;
 import asgardengine.game.entities.EntityID;
 import asgardengine.game.entities.GameEntity;
 import asgardengine.game.entities.graphics.AnimationEntity;
 import asgardengine.game.handler.EntityHandler;
+import asgardengine.rendering.RenderPanel;
+import asgardengine.utility.quadtree.RectangularBound;
 
 public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	
 	private Actor actor = null;
 	private AnimationEntity currentAnim = null; // the animation currently played
+	private Place currentPlace = null;
 	
 	//states
 	private boolean isJumping = false;
@@ -104,15 +107,17 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	 * @return true if there is collision
 	 */
 	public boolean collides() {
-		ArrayList<Placeable> potentialColliders = Place.tree.get(this.getBounds());
-//		System.out.println("Checking collision for " + potentialColliders.size() + " objects.");
+		// TODO : improve // remove static
+		ArrayList<Placeable> potentialColliders = RenderPanel.placeHandler.getCloseEntities(this);
+		System.out.println("Checking collision for " + potentialColliders.size() + " objects.");
 		if (potentialColliders != null) {
 			for (Placeable collider : potentialColliders) {
-				if ((this.getBounds().intersects(collider.getBounds()) ||collider.getBounds().intersects(this.getBounds()) ) && (collider.getPosition().getZ() + collider.getZHeight()) > (this.getPosition().getZ() + this.getSteppingHeight()) && (collider.getPosition().getZ() <= (this.getPosition().getZ() + this.getZHeight()))) {
+//				System.out.println(collider + " ; " + collider.getPosition());
+				if ((this.getBounds().intersects(collider.getBounds()) ) && (collider.getPosition().getZ() + collider.getZHeight()) > (this.getPosition().getZ() + this.getSteppingHeight()) && (collider.getPosition().getZ() <= (this.getPosition().getZ() + this.getZHeight()))) {
 //				Rectangle intersection = this.getBounds().intersection(collider.getBounds());
 //				if (intersection != null && intersection.getWidth() > 0 && intersection.getHeight() > 0 && (collider.getPosition().getZ() + collider.getZHeight()) > (this.getPosition().getZ() + this.getSteppingHeight()) && (collider.getPosition().getZ() <= (this.getPosition().getZ() + this.getZHeight()))) {
 
-					System.out.println("Collision between " + this.getBounds() + " and " + collider.getBounds() + " in area " + this.getBounds().intersection(collider.getBounds()));
+					System.out.println("Collision between " + this.getBounds() + " and " + collider.getBounds() + " in area " + this.getBounds().intersects(collider.getBounds()));
 					return true;
 				}
 			}
@@ -212,8 +217,8 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	}
 
 	@Override
-	public Rectangle getBounds() {
-		return new Rectangle((int) this.getPosition().getX(), (int) this.getPosition().getY(), (int) this.getWidth(), (int) this.getHeight());
+	public RectangularBound getBounds() {
+		return new RectangularBound(this.getPosition(), this.getWidth(), this.getHeight());
 	}
 
 	@Override
@@ -241,6 +246,34 @@ public class ActorEntity extends GameEntity implements Drawable, Placeable {
 		} else {
 			return 0.0d;
 		}
+	}
+
+	@Override
+	public PlaceTreeCell getCell() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCell(PlaceTreeCell cell) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPlace(Place place) {
+		this.currentPlace = place;	
+	}
+
+	@Override
+	public Place getPlace() {
+		return this.currentPlace;
+	}
+
+	@Override
+	public boolean removeFromPlace() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

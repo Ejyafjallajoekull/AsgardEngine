@@ -96,4 +96,13 @@ public abstract class GameClass {
 		return this.getClassID() + ":" + this.getDescriptiveName();
 	}
 	
+	@Override
+	public int hashCode() {
+		if (this.getClassID() != null) {
+			return this.getClassID().hashCode();
+		} else {
+			return 0;
+		}
+	}
+	
 }

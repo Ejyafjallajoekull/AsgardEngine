@@ -1,7 +1,11 @@
 package asgardengine.utility.quadtree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
+import asgardengine.utility.math.Trigonometry;
 
 /**
  * The RectangularBound class represents a rectangle with 
@@ -17,7 +21,11 @@ public class RectangularBound {
 	private double height = 0.0d;
 	private Rotation1D rotation = new Rotation1D();
 	private Position center = new Position();
-
+	private double radius = 0.0d; // convenience variable // radius of the outer circle of this rectangle
+	private double offsetAngle = 0.0d; // the offset of the upper right corner
+	private Position[] corners = new Position[4]; // the corners
+	private Position[] normals = new Position[2]; // the normals
+	
 	public RectangularBound(Position center, double width, double height) {
 		this.setCenter(center);
 		this.setWidth(width);
@@ -63,8 +71,27 @@ public class RectangularBound {
 	 * @return true if the two RectangularBounds intersect each other
 	 */
 	public boolean intersects(RectangularBound bound) {
-		// TODO: everything
-		return false;
+		boolean intersects = false; // false as standard return
+		if (bound != null) {
+			intersects = true; // set it to true for following iteration -> check for separation
+			Position[] corners1 = this.getCorners();
+			Position[] corners2 = bound.getCorners();
+//			long bef = System.nanoTime();
+
+			ArrayList<Position> normals = new ArrayList<Position>(Arrays.asList(this.getNormals()));
+			normals.addAll(Arrays.asList(bound.getNormals()));
+//			bef = System.nanoTime() - bef;
+//			System.out.println(bef);
+			Intersector intersector = null;
+			for (Position normal : normals) {
+				intersector = new Intersector(corners1, corners2, normal);
+				if (intersector.isSeparated()) {
+					intersects = false;
+					break;
+				}
+			}
+		}
+		return intersects;
 	}
 	
 	/**
@@ -117,6 +144,7 @@ public class RectangularBound {
 	 */
 	public void setHeight(double height) {
 		this.height = height;
+		this.calculateRadius();
 	}
 	
 	/**
@@ -126,12 +154,124 @@ public class RectangularBound {
 	 */
 	public void setWidth(double width) {
 		this.width = width;
+		this.calculateRadius();
+	}
+	
+	/**
+	 * Get the two normals needed for collision detection.
+	 * 
+	 * @return two normals needed for collision
+	 */
+	private Position[] getNormals() {
+		return this.normals;
 	}
 	
 	public Position getTopLeft() {
-		// TODO: do this right
-		double x = this.center.getX() + this.width*Math.cos(this.rotation.asRadians());
-		return new Position( , , this.center.getZ());
+		double x = this.center.getX() + this.radius * Math.sin(this.rotation.asRadians() - this.offsetAngle);
+		double y = this.center.getY() + this.radius * Math.cos(this.rotation.asRadians() - this.offsetAngle);
+		return new Position(x, y, this.center.getZ());
+	}
+	
+	public Position getTopRight() {
+		double x = this.center.getX() + this.radius * Math.sin(this.rotation.asRadians() + this.offsetAngle);
+		double y = this.center.getY() + this.radius * Math.cos(this.rotation.asRadians() + this.offsetAngle);
+		return new Position(x, y, this.center.getZ());
+	}
+	
+	public Position getLesserLeft() {
+		double x = this.center.getX() + this.radius * Math.sin(this.rotation.asRadians() + this.offsetAngle + Math.PI);
+		double y = this.center.getY() + this.radius * Math.cos(this.rotation.asRadians() + this.offsetAngle + Math.PI);
+		return new Position(x, y, this.center.getZ());
+	}
+	
+	public Position getLesserRight() {
+		double x = this.center.getX() + this.radius * Math.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		double y = this.center.getY() + this.radius * Math.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		return new Position(x, y, this.center.getZ());
+	}
+	
+	public Position[] getCorners() {
+		return this.corners;
+	}
+	
+	// convenience method
+	// calculate the radius of the outer circle surrounding this rectangle
+	// and calculate the offset angle
+	private void calculateRadius() {
+		this.radius = (new Position(this.width, this.height, 0.0d)).amount() * 0.5d;
+		this.offsetAngle = Math.atan(this.width/this.height);
+		
+//		double x = this.radius * Math.sin(this.rotation.asRadians() + this.offsetAngle);
+//		double y = this.radius * Math.cos(this.rotation.asRadians() + this.offsetAngle);
+
+		double x = this.radius * Trigonometry.sin(this.rotation.asRadians() + this.offsetAngle);
+		double y = this.radius * Trigonometry.cos(this.rotation.asRadians() + this.offsetAngle);
+		
+//		double x = 1;
+//		double y = 1;
+		
+		this.corners[0] = new Position(this.getCenter().getX() + x, this.getCenter().getY() + y, this.center.getZ());
+		this.corners[2] = new Position(this.getCenter().getX() - x, this.getCenter().getY() - y, this.center.getZ());
+		
+//		x = this.radius * Math.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+//		y = this.radius * Math.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+
+		x = this.radius * Trigonometry.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		y = this.radius * Trigonometry.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		
+		this.corners[1] = new Position(this.getCenter().getX() + x, this.getCenter().getY() + y, this.center.getZ());
+		this.corners[3] = new Position(this.getCenter().getX() - x, this.getCenter().getY() - y, this.center.getZ());
+		
+		Position q = Position.subtract(this.corners[0], this.corners[3]);
+		Position r = Position.subtract(this.corners[1], this.corners[0]);
+		this.normals[0] = q.normalVector(true);
+		this.normals[1] = r.normalVector(true);
+	}
+	
+	// a pair of min and max scalar products for a rectangle and a normal vector
+	private class MinMaxPair {
+		public double min = Double.MAX_VALUE; // start at largest possible value
+		public double max = -Double.MAX_VALUE; // start at smallest possible value
+		
+		// throw null pointer exception if something's not right
+		public MinMaxPair(Position[] corners, Position normal) {
+			double value = 0.0d;
+			for (Position corner : corners) {
+				value = corner.scalarProduct(normal);
+				if (value > max) {
+					this.max = value;
+				}
+				if (value < min) {
+					this.min = value;
+				}
+			}
+		}
+		
+	}
+	
+	private class Intersector {
+		
+		private boolean separation = false;
+		
+		public Intersector(Position[] corners1, Position corners2[], Position normal) {
+			if (corners1 != null && corners2 != null && normal != null) {
+				MinMaxPair pair1 = new MinMaxPair(corners1, normal);
+				MinMaxPair pair2 = new MinMaxPair(corners2, normal);
+				if (pair1.max < pair2.min || pair2.max < pair1.min) {
+					this.separation = true;
+				}
+			}
+		}
+		
+		public boolean isSeparated() {
+			return this.separation;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "RectangularBound [width=" + width + ", height=" + height + ", rotation=" + rotation + ", center="
+				+ center + "]";
 	}
 	
 }

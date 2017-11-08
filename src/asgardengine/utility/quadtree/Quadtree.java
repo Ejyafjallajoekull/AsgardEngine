@@ -1,6 +1,5 @@
 package asgardengine.utility.quadtree;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import asgardengine.game.classes.world.Placeable;
@@ -17,13 +16,12 @@ public class Quadtree {
 	private int maxDepth = Integer.MAX_VALUE; // the maximal number of subnodes
 	private int nodeThreshold = 256; // the threshold for creation of new nodes
 	private QuadNode root = null;
-	private Rectangle space = null;
+	private RectangularBound space = null;
 	
-	public Quadtree(int maxDepth, int threshold, Position center, Position topLeft) {
+	public Quadtree(int maxDepth, int threshold, Position center, double width, double height) {
 		this.maxDepth = maxDepth;
 		this.nodeThreshold = threshold;
-		Position diff = Position.subtract(center, topLeft);
-		this.space = new Rectangle((int) topLeft.getX(), (int) topLeft.getY(), (int) (diff.getX()*2.0d), (int) (diff.getY()*2.0d));
+		this.space = new RectangularBound(center, width, height);
 		this.root = new QuadNode(0, this, space);
 	}
 	
@@ -34,12 +32,12 @@ public class Quadtree {
 		this.root = new QuadNode(0, this, space);
 	}
 	
-	public ArrayList<Placeable> get(Rectangle targetSpace) {
+	public ArrayList<Placeable> get(RectangularBound targetSpace) {
 		return this.root.get(targetSpace);
 	}
 	
 	public void add(Placeable object) {
-		this.root.add(object);
+		this.root.add(object);	
 	}
 
 	public int getMaxDepth() {

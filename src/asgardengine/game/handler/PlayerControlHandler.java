@@ -4,10 +4,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import asgardengine.game.entities.actors.ActorEntity;
+import asgardengine.rendering.RenderPanel;
 
 public class PlayerControlHandler implements KeyListener{
 
-	ActorEntity player = null;
+	private ActorEntity player = null;
 	
 	//states
 	private boolean isMovingUp = false;
@@ -22,6 +23,7 @@ public class PlayerControlHandler implements KeyListener{
 	public static final int MOVE_LEFT = KeyEvent.VK_A;
 	public static final int JUMP = KeyEvent.VK_SPACE;
 	public static final int RUN = KeyEvent.VK_SHIFT;
+	public static final int TESTING_MEASURE = KeyEvent.VK_L;
 	
 	public PlayerControlHandler(ActorEntity player) {
 		this.player = player;
@@ -34,6 +36,10 @@ public class PlayerControlHandler implements KeyListener{
 		} else {
 			return false;
 		}
+	}
+	
+	private void measure() {
+		System.out.println("Measured value: " + RenderPanel.measure / RenderPanel.measureIndex);
 	}
 	
 	private void adjustPlayerRotation() {
@@ -91,6 +97,11 @@ public class PlayerControlHandler implements KeyListener{
 		if (ke.getKeyCode() == JUMP) {
 			player.jump();
 		}
+		
+		if (ke.getKeyCode() == TESTING_MEASURE) {
+			this.measure();
+		}
+		
 	}
 
 	@Override
