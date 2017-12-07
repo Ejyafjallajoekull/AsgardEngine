@@ -60,7 +60,7 @@ public class RenderPanel extends JPanel {
 		byte[] index = {0,0};
 		Sprite grass01 = new Sprite(ClassHandler.nextID(index), new File("Test//green_01.png"));
 		Tile grassTile01 = new Tile(ClassHandler.nextID(index), grass01);
-		Trigonometry.initialise();
+//		Trigonometry.initialise();
 //		double maxDiff = 0.0d;
 //		double curDiff = 0.0d;
 //		double math = 0.0d;
@@ -69,7 +69,7 @@ public class RenderPanel extends JPanel {
 //		for (int i = 0; i < 100000; i++) {
 //			randD = this.random.nextDouble();
 //			math = Math.cos(randD);
-//			trig = Trigonometry.cos(randD);
+//			trig = Trigonometry.cosNotch((float) randD);
 //			curDiff = trig-math;
 //			if (curDiff < 0.0d) {
 //				curDiff *= -1.0d;

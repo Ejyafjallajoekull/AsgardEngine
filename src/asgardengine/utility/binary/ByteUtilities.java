@@ -24,7 +24,7 @@ public class ByteUtilities {
 	}
 	
 	/**
-	 * Fuse to byte arrays.
+	 * Fuse two byte arrays.
 	 * 
 	 * @param extend - the byte array to be extended
 	 * @param with - the byte array to append
@@ -83,7 +83,7 @@ public class ByteUtilities {
 	}
 	
 	// create an int from a byte array
-	public static final int toInt(byte[] bytes) throws IllegalArgumentException {
+	public static final int toInt(byte[] bytes) {
 		if (bytes.length >= Integer.BYTES) { // do not check this since an exception should be thrown when passing less than 4 bytes
 			return ByteBuffer.wrap(bytes).getInt();
 		} else {

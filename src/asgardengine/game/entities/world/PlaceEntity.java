@@ -79,7 +79,7 @@ public class PlaceEntity extends GameEntity {
 	}
 
 	@Override
-	public void createFromBytes(byte[] bytes) throws IllegalArgumentException {
+	public void createFromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
 
 	}

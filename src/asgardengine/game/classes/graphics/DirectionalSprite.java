@@ -73,11 +73,11 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	 * @return the Sprite assigned to the currently set rotation
 	 */
 	public Sprite getSprite() {
-		if (this.rotation.asDegrees() >= 225.0d && this.rotation.asDegrees() < 315.0d) {
+		if (this.rotation.asRadians() >= Rotation1D.RADIANS_SOUTHWEST && this.rotation.asRadians() < Rotation1D.RADIANS_NORTHWEST) {
 			return this.sprites[2]; // left
-		} else if (this.rotation.asDegrees() >= 45.0d && this.rotation.asDegrees() < 135.0d) {
+		} else if (this.rotation.asRadians() >= Rotation1D.RADIANS_NORTHEAST && this.rotation.asRadians() < Rotation1D.RADIANS_SOUTHEAST) {
 			return this.sprites[3]; // right
-		} else if (this.rotation.asDegrees() >= 135.0d && this.rotation.asDegrees() < 225.0d) {
+		} else if (this.rotation.asRadians() >= Rotation1D.RADIANS_SOUTHEAST && this.rotation.asRadians() < Rotation1D.RADIANS_SOUTHWEST) {
 			return this.sprites[0]; // front
 		} else {
 			return this.sprites[1]; // back
@@ -87,11 +87,11 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	/**
 	 * Get the Sprite assigned to the specified rotation.
 	 * 
-	 * @param degrees - the rotation in degrees to get the Sprite for
+	 * @param radians - the rotation in radians to get the Sprite for
 	 * @return the Sprite assigned to the specified rotation
 	 */
-	public Sprite getSprite(double degrees) {
-		this.setRotation(degrees);
+	public Sprite getSprite(double radians) {
+		this.setRotation(radians);
 		return this.getSprite();
 	}
 	
@@ -109,10 +109,10 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	/**
 	 * Set the rotation.
 	 * 
-	 * @param degrees - the degrees of rotation as double
+	 * @param radians - the radians of rotation as double
 	 */
-	public void setRotation(double degrees) {
-		this.rotation.setRotation(degrees);
+	public void setRotation(double radians) {
+		this.rotation.setRotation(radians);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	 */
 	public void setRotation(Rotation1D rotation) {
 		if (rotation != null) {
-			this.rotation.setRotation(rotation.asDegrees());	
+			this.rotation.setRotation(rotation.asRadians());	
 		}
 	}
 	

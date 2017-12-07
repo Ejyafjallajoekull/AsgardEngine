@@ -5,7 +5,9 @@ import java.util.Arrays;
 public class Hexadecimal {
 
 	private final static char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-	String hex = null; // the hexadecimal representation of the given byte array
+	private String hex = null; // the hexadecimal representation of the given byte array
+	
+	// TODO: finish this class' implementation and add JavaDoc
 	
 	public Hexadecimal(byte[] bytes) {
 		this.hex = toHex(bytes);

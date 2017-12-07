@@ -25,7 +25,14 @@ public class Trigonometry {
 //		System.out.println(getSinIndex(PI_DOUBLE + 1));
 	}
 	
-	public static void initialise() {
+//	public static void initialise() {
+//		if (!Trigonometry.init) {
+//			Trigonometry.populateMaps();
+//			Trigonometry.init = true;
+//		}
+//	}
+//	
+	static {
 		if (!Trigonometry.init) {
 			Trigonometry.populateMaps();
 			Trigonometry.init = true;
@@ -89,6 +96,22 @@ public class Trigonometry {
 		}
 		return cos;
 	}
+	
+    private static double[] a = new double[65536];
+
+    public static final double sinNotch(float f) {
+        return a[(int) (f * 10430.378F) & '\uffff'];
+    }
+
+    public static final double cosNotch(float f) {
+        return a[(int) (f * 10430.378F + 16384.0F) & '\uffff'];
+    }
+
+    static {
+        for (int i = 0; i < 65536; ++i) {
+            a[i] = Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
+        }
+    }
 	
 	public static double tan() {
 		

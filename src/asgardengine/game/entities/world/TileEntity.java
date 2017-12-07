@@ -1,15 +1,9 @@
 package asgardengine.game.entities.world;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
 
-import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-import asgardengine.game.classes.GameClass;
 import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Place;
@@ -59,7 +53,7 @@ public class TileEntity extends GameEntity implements Drawable, Placeable {
 		if (this.tile != null) {
 			Sprite s = this.getSprite();
 			if (s != null) {
-				if (this.getRotation().asDegrees() != 0.0d) {
+				if (this.getRotation().asRadians() != 0.0d) {
 					this.cache = Drawable.rotate(s.toBufferedImage(), this.getRotation().asRadians());
 				} else {
 					this.cache = s.toBufferedImage();

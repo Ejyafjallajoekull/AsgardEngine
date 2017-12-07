@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import asgardengine.game.classes.world.Position;
 import asgardengine.game.classes.world.Rotation1D;
-import asgardengine.utility.math.Trigonometry;
 
 /**
  * The RectangularBound class represents a rectangle with 
@@ -65,7 +64,7 @@ public class RectangularBound {
 	}
 	
 	/**
-	 * Check if there is intersection between this RectangularBoundn and the specified one.
+	 * Check if there is intersection between this RectangularBound and the specified one.
 	 * 
 	 * @param bound - the RectangularBound to check intersection with
 	 * @return true if the two RectangularBounds intersect each other
@@ -76,12 +75,8 @@ public class RectangularBound {
 			intersects = true; // set it to true for following iteration -> check for separation
 			Position[] corners1 = this.getCorners();
 			Position[] corners2 = bound.getCorners();
-//			long bef = System.nanoTime();
-
 			ArrayList<Position> normals = new ArrayList<Position>(Arrays.asList(this.getNormals()));
 			normals.addAll(Arrays.asList(bound.getNormals()));
-//			bef = System.nanoTime() - bef;
-//			System.out.println(bef);
 			Intersector intersector = null;
 			for (Position normal : normals) {
 				intersector = new Intersector(corners1, corners2, normal);
@@ -131,10 +126,11 @@ public class RectangularBound {
 	 * Set the rotation of this object either in degrees or radians.
 	 * 
 	 * @param rotation - the rotation of this object
-	 * @param degrees - true to process the passed rotation value as degrees, false to process it as radians
+	 * @param radians - false to process the passed rotation value as degrees, true to process it as radians
 	 */
-	public void setRotation(double rotation, boolean degrees) {
-		this.rotation.setRotation(rotation, !degrees);
+	public void setRotation(double rotation, boolean radians) {
+		this.rotation.setRotation(rotation, radians);
+		this.calculateRadius();
 	}
 	
 	/**
@@ -201,11 +197,11 @@ public class RectangularBound {
 		this.radius = (new Position(this.width, this.height, 0.0d)).amount() * 0.5d;
 		this.offsetAngle = Math.atan(this.width/this.height);
 		
-//		double x = this.radius * Math.sin(this.rotation.asRadians() + this.offsetAngle);
-//		double y = this.radius * Math.cos(this.rotation.asRadians() + this.offsetAngle);
+		double x = this.radius * Math.sin(this.rotation.asRadians() + this.offsetAngle);
+		double y = this.radius * Math.cos(this.rotation.asRadians() + this.offsetAngle);
 
-		double x = this.radius * Trigonometry.sin(this.rotation.asRadians() + this.offsetAngle);
-		double y = this.radius * Trigonometry.cos(this.rotation.asRadians() + this.offsetAngle);
+//		double x = this.radius * Trigonometry.sinSimpleCalc((this.rotation.asRadians() + this.offsetAngle));
+//		double y = this.radius * Trigonometry.cosSimpleCalc((this.rotation.asRadians() + this.offsetAngle));
 		
 //		double x = 1;
 //		double y = 1;
@@ -213,11 +209,11 @@ public class RectangularBound {
 		this.corners[0] = new Position(this.getCenter().getX() + x, this.getCenter().getY() + y, this.center.getZ());
 		this.corners[2] = new Position(this.getCenter().getX() - x, this.getCenter().getY() - y, this.center.getZ());
 		
-//		x = this.radius * Math.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
-//		y = this.radius * Math.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		x = this.radius * Math.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+		y = this.radius * Math.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
 
-		x = this.radius * Trigonometry.sin(this.rotation.asRadians() - this.offsetAngle + Math.PI);
-		y = this.radius * Trigonometry.cos(this.rotation.asRadians() - this.offsetAngle + Math.PI);
+//		x = this.radius * Trigonometry.sinSimpleCalc((this.rotation.asRadians() - this.offsetAngle + Math.PI));
+//		y = this.radius * Trigonometry.cosSimpleCalc((this.rotation.asRadians() - this.offsetAngle + Math.PI));
 		
 		this.corners[1] = new Position(this.getCenter().getX() + x, this.getCenter().getY() + y, this.center.getZ());
 		this.corners[3] = new Position(this.getCenter().getX() - x, this.getCenter().getY() - y, this.center.getZ());
@@ -272,6 +268,25 @@ public class RectangularBound {
 	public String toString() {
 		return "RectangularBound [width=" + width + ", height=" + height + ", rotation=" + rotation + ", center="
 				+ center + "]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof RectangularBound) {
+			RectangularBound r = (RectangularBound) obj;
+			if (this.getWidth() == r.getWidth() && this.getHeight() == r.getHeight() &&
+					this.getCenter().equals(r.getCenter()) && this.getRotation().equals(r.getRotation())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public RectangularBound clone() {
+		RectangularBound clone = new RectangularBound(this.getCenter(), this.getWidth(), this.getHeight());
+		clone.setRotation(this.getRotation().asRadians(), true);
+		return clone;
 	}
 	
 }

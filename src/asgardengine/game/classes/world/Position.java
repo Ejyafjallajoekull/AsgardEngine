@@ -525,16 +525,17 @@ public class Position {
 	 * 
 	 * @param vector1 - the first Position vector
 	 * @param vector2 - the second Position vector
-	 * @param degrees - true to return the angle in degrees, false to return the angle in radians
+	 * @param radians - true to return the angle in radians, false to return the angle in degrees
 	 * @return the angle between the specified Position vectors as double
 	 */
-	public static double angle(Position vector1, Position vector2, boolean degrees) {
+	public static double angle(Position vector1, Position vector2, boolean radians) {
 		if (vector1 != null && vector2 != null) {
 			double angle = Math.acos(vector1.scalarProduct(vector2)/(vector1.amount()*vector2.amount())); // radians
-			if (degrees) { // return the angle in degrees
-				return Rotation1D.normalise(Math.toDegrees(angle)); // normalise the angle to 0 - 360° before returning
-			} else { // return the angle in radians
+			if (radians) { // return the angle in radians
 				return angle;
+			} else { // return the angle in degrees
+				return Math.toDegrees(angle);
+
 			}
 		} else {
 			return 0.0d;

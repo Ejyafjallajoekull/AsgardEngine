@@ -3,6 +3,7 @@ package asgardengine.game.handler;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import asgardengine.game.classes.world.Rotation1D;
 import asgardengine.game.entities.actors.ActorEntity;
 import asgardengine.rendering.RenderPanel;
 
@@ -45,24 +46,24 @@ public class PlayerControlHandler implements KeyListener{
 	private void adjustPlayerRotation() {
 		if (this.isMovingUp) {
 			if (this.isMovingLeft) {
-				player.getRotation().setRotation(315.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_NORTHWEST);
 			} else if (this.isMovingRight) {
-				player.getRotation().setRotation(45.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_NORTHEAST);
 			} else {
-				player.getRotation().setRotation(0.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_NORTH);
 			}
 		} else if (this.isMovingDown) {
 			if (this.isMovingLeft) {
-				player.getRotation().setRotation(225.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_SOUTHWEST);
 			} else if (this.isMovingRight) {
-				player.getRotation().setRotation(135.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_SOUTHEAST);
 			} else {
-				player.getRotation().setRotation(180.0d);
+				player.getRotation().setRotation(Rotation1D.RADIANS_SOUTH);
 			}
 		} else if (this.isMovingLeft) {
-			player.getRotation().setRotation(270.0d);
+			player.getRotation().setRotation(Rotation1D.RADIANS_WEST);
 		} else if (this.isMovingRight) {
-			player.getRotation().setRotation(90.0d);
+			player.getRotation().setRotation(Rotation1D.RADIANS_EAST);
 		}
 	}
 	

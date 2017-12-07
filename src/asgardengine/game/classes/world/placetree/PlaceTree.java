@@ -1,6 +1,5 @@
 package asgardengine.game.classes.world.placetree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import asgardengine.game.classes.world.Placeable;
@@ -41,6 +40,12 @@ public class PlaceTree {
 		}
 	}
 	
+	/**
+	 * Add an entity to this PlaceTree.
+	 * 
+	 * @param entity - the Placeable to add
+	 * @return true if the addition was successful
+	 */
 	public boolean add(Placeable entity) {
 		if (entity != null) {
 			PlaceTreeCell cell = this.cellMap.get(this.placeableToKey(entity));
@@ -96,26 +101,33 @@ public class PlaceTree {
 	
 	/**
 	 * Get the cell at the specified position and the specified amount of surrounding cells.
+	 * A two dimensional array is returned containing the central cell in its' center.
+	 * All surrounding cells are arranged at indices indicating their relative position 
+	 * to the central cell.
+	 * The array can be accessed in the form Cells[relative X-coordinate][relative Y-coordinate]
 	 * 
 	 * @param position - the Position to search for
-	 * @return a list of PlaceTreeCell surrounding the specified position as ArrayList
+	 * @param surroundingCells - the layers of surrounding cells to fetch
+	 * @return an array of PlaceTreeCells surrounding the specified position as 2D-array
 	 */
-	public ArrayList<PlaceTreeCell> get2D(Position position, int surroundingCells) {
+	public PlaceTreeCell[][] get2D(Position position, int surroundingCells) {
 		if (position != null && surroundingCells >= 0) {
-			PlaceTreeCell cell = null;
+//			PlaceTreeCell cell = null;
 			PlaceTreeCellKey cellKey = this.positionToKey(position); // center
 			int minCellLengthX = cellKey.getX() - surroundingCells;
 			int minCellLengthY = cellKey.getY() - surroundingCells;
 			int maxCellLengthX = cellKey.getX() + surroundingCells;
 			int maxCellLengthY = cellKey.getY() + surroundingCells;
 			int CellLentgthZ = cellKey.getZ(); // the z-plane to get
-			ArrayList<PlaceTreeCell> cells = new ArrayList<PlaceTreeCell>();
+//			ArrayList<PlaceTreeCell> cells = new ArrayList<PlaceTreeCell>(); // switched to 2D-Array to conserve structure
+			PlaceTreeCell[][] cells = new PlaceTreeCell[2*surroundingCells+1][2*surroundingCells+1];
 			for (int i = minCellLengthX; i <= maxCellLengthX; i++) {
 				for (int n = minCellLengthY; n <= maxCellLengthY; n++) {
-					cell = this.cellMap.get(new PlaceTreeCellKey(i, n, CellLentgthZ));
-					if (cell != null) {
-						cells.add(cell);
-					}
+					cells[i][n] = this.cellMap.get(new PlaceTreeCellKey(i, n, CellLentgthZ));
+//					cell = this.cellMap.get(new PlaceTreeCellKey(i, n, CellLentgthZ));
+//					if (cell != null) {
+//						cells.add(cell);
+//					}
 				}
 			}
 			return cells;
@@ -142,6 +154,12 @@ public class PlaceTree {
 		return new Integer((int) Math.floor(exactIndex));
 	}
 
+	/**
+	 * Get the center of the specified PlaceTreeCell.
+	 * 
+	 * @param cell - the PlaceTreeCell to get the center from
+	 * @return the center of the specified cell as Position vector
+	 */
 	public Position getCellCenter(PlaceTreeCell cell) {
 		if (cell != null) {
 			double x = (cell.getIndexX() + 1) * this.cellX - this.cellX*0.5d;

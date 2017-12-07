@@ -1,9 +1,10 @@
 package asgardengine.game.classes.world.placetree;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import asgardengine.game.classes.world.Placeable;
+import asgardengine.utility.quadtree.AsgardRootNode;
+import asgardengine.utility.quadtree.QuadNode;
 
 /**
  * The PlaceTreeCell class represents a single cell of a PlaceTree containing GameEntities.
@@ -18,13 +19,21 @@ public class PlaceTreeCell {
 //	private ArrayList<Placeable> entityList = new ArrayList<Placeable>();
 	private HashSet<Placeable> entityList = new HashSet<Placeable>(100000);
 //	private ArrayList<TileEntity> tileList = new ArrayList<TileEntity>();
-//	private ArrayList<ActorEntity> actorList = new ArrayList<ActorEntity>();
+	private AsgardRootNode root = null;
+	
 	// coordinate indices
 	private int x = 0;
 	private int y = 0;
 	private int z = 0;
 	
 	
+	/**
+	 * Create a cell with the specified coordinates.
+	 * 
+	 * @param x - the X-index of this PlaceTreeCell
+	 * @param y - the Y-index of this PlaceTreeCell
+	 * @param z - the Z-index of this PlaceTreeCell
+	 */
 	public PlaceTreeCell(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
@@ -43,10 +52,6 @@ public class PlaceTreeCell {
 		}
 		return false;
 	}
-
-//	public HashMap<EntityID, Placeable> getEntityMap() {
-//		return entityMap;
-//	}
 
 	/**
 	 * Get the X-index of this cell.
@@ -82,5 +87,35 @@ public class PlaceTreeCell {
 	 */
 	public HashSet<Placeable> getEntities() {
 		return this.entityList;
+	}
+	
+	/**
+	 * Get whether this cell has a QuadNode attached to it or not.
+	 * A QuadNode grants access to advanced object sorting and is 
+	 * normally attached when a cell is loaded.
+	 * 
+	 * @return true if this cell has a QuadNode attached
+	 */
+	public boolean hasQuadNode() {
+		if (this.root == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	// TODO: figure out whether cells should become quadtrees or not
+	public void initialiseQuadNode() {
+		this.root = new AsgardRootNode(1, , );
+	}
+	
+	/**
+	 * Destroy the QuadNode.
+	 * This will simply remove the reference to the root, so the garbage cleaner 
+	 * can handle object removal.
+	 */
+	public void destroyQuadNode() {
+		// TODO: handle unloading
+		this.root = null;
 	}
 }

@@ -58,15 +58,17 @@ public class PlaceHandler {
 	
 	/**
 	 * Get a number of cells at the specified Position vector.
-	 * The position vector is used to determine the central cells 
+	 * The position vector is used to determine the central cell 
 	 * and the layers of surrounding cells are determined by the 
 	 * PLACETREE_SURROUNDING_CELLS constant.
-	 * The resulting list will not contain null values.
+	 * The resulting two dimensional array will contain null values for 
+	 * non existing cells and is arranged in the form Cells[relative X-coordinate][relative Y-coordinate]
+	 * with the central cell as at the centre of the array.
 	 * 
 	 * @param position - the Position vector to define the central PlaceTreeCell
 	 * @return a List of PlaceTreeCells surrounding the specified Position vector as ArrayList
 	 */
-	public ArrayList<PlaceTreeCell> getCells(Position position) {
+	public PlaceTreeCell[][] getCells(Position position) {
 		if (this.loadedPlace != null && this.loadedPlace.getSource() != null) {
 			return this.loadedPlace.getSource().getCellTree().get2D(position, PlaceHandler.PLACETREE_SURROUNDING_CELLS);			
 		} else {

@@ -13,11 +13,21 @@ import asgardengine.game.classes.world.Rotation1D;
  */
 public class DirectionalAnimation extends GameClass {
 
+	/**
+	 * The unique type identifier of this class.
+	 */
 	public static final byte[] TYPE = {0, 6};
+//	public static final int TODO: implement constants for direction indices
 	
 	private Animation[] animations = new Animation[4];
 	private Rotation1D rotation = new Rotation1D();
 	
+	/**
+	 * Create a directional animation from an array of animations.
+	 * 
+	 * @param classID - the unique identifier of this GameClass
+	 * @param animations - the array of animations to 
+	 */
 	public DirectionalAnimation(ClassID classID, Animation[] animations) {
 		super(classID);
 		for (int i = 0; i < this.animations.length; i++) {
@@ -44,19 +54,19 @@ public class DirectionalAnimation extends GameClass {
 	}
 	
 	public Animation getAnimation() {
-		if (this.rotation.asDegrees() >= 225.0d && this.rotation.asDegrees() < 315.0d) {
+		if (this.rotation.asRadians() >= Rotation1D.RADIANS_SOUTHWEST && this.rotation.asRadians() < Rotation1D.RADIANS_NORTHWEST) {
 			return this.animations[2]; // left
-		} else if (this.rotation.asDegrees() >= 45.0d && this.rotation.asDegrees() < 135.0d) {
+		} else if (this.rotation.asRadians() >= Rotation1D.RADIANS_NORTHEAST && this.rotation.asRadians() < Rotation1D.RADIANS_SOUTHEAST) {
 			return this.animations[3]; // right
-		} else if (this.rotation.asDegrees() >= 135.0d && this.rotation.asDegrees() < 225.0d) {
+		} else if (this.rotation.asRadians() >= Rotation1D.RADIANS_SOUTHEAST && this.rotation.asRadians() < Rotation1D.RADIANS_SOUTHWEST) {
 			return this.animations[0]; // front
 		} else {
 			return this.animations[1]; // back
 		}
 	}
 	
-	public Animation getAnimation(double degrees) {
-		this.setRotation(degrees);
+	public Animation getAnimation(double radians) {
+		this.setRotation(radians);
 		return this.getAnimation();
 	}
 	
@@ -68,10 +78,10 @@ public class DirectionalAnimation extends GameClass {
 	/**
 	 * Set the rotation.
 	 * 
-	 * @param degrees - the degrees of rotation as double
+	 * @param radians - the radians of rotation as double
 	 */
-	public void setRotation(double degrees) {
-		this.rotation.setRotation(degrees);
+	public void setRotation(double radians) {
+		this.rotation.setRotation(radians);
 	}
 
 	/**
@@ -81,7 +91,7 @@ public class DirectionalAnimation extends GameClass {
 	 */
 	public void setRotation(Rotation1D rotation) {
 		if (rotation != null) {
-			this.rotation.setRotation(rotation.asDegrees());	
+			this.rotation.setRotation(rotation.asRadians());	
 		}
 	}
 
@@ -92,7 +102,7 @@ public class DirectionalAnimation extends GameClass {
 	}
 
 	@Override
-	public void createFromBytes(byte[] bytes) throws IllegalArgumentException {
+	public void createFromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
 
 	}
