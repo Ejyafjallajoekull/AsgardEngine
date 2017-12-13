@@ -157,7 +157,7 @@ public class DirectionalSprite extends GameClass implements Drawable {
 	}
 
 	@Override
-	public void createFromBytes(byte[] bytes) throws IllegalArgumentException {
+	public void createFromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
 
 	}
