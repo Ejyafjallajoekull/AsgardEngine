@@ -1,6 +1,8 @@
 package asgardengine.main;
 
 import asgardengine.rendering.DisplayFrame;
+import central.logging.functionality.LoggingFailureException;
+import central.logging.functionality.LoggingHandler;
 
 public class AsgardMain implements Runnable {
 	

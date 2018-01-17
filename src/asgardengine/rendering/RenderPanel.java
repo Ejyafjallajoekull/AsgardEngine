@@ -14,7 +14,6 @@ import asgardengine.game.classes.actors.Actor;
 import asgardengine.game.classes.graphics.Animation;
 import asgardengine.game.classes.graphics.DirectionalAnimation;
 import asgardengine.game.classes.graphics.DirectionalSprite;
-import asgardengine.game.classes.graphics.Drawable;
 import asgardengine.game.classes.graphics.Sprite;
 import asgardengine.game.classes.world.Place;
 import asgardengine.game.classes.world.Placeable;
@@ -27,10 +26,9 @@ import asgardengine.game.handler.ClassHandler;
 import asgardengine.game.handler.EntityHandler;
 import asgardengine.game.handler.PlaceHandler;
 import asgardengine.game.handler.PlayerControlHandler;
-import asgardengine.utility.logging.LoggingHandler;
-import asgardengine.utility.math.Trigonometry;
-import asgardengine.utility.quadtree.Quadtree;
 import asgardengine.utility.quadtree.RectangularBound;
+import central.logging.functionality.LoggingFailureException;
+import central.logging.functionality.LoggingHandler;
 
 public class RenderPanel extends JPanel {
 
@@ -56,7 +54,12 @@ public class RenderPanel extends JPanel {
 	}
 	
 	public void test() {
-		LoggingHandler.startLogWriting();
+		try {
+			LoggingHandler.startLogWriting();
+		} catch (LoggingFailureException e1) {
+			System.out.println("Starting the logging process failed");
+			e1.printStackTrace();
+		}
 		byte[] index = {0,0};
 		Sprite grass01 = new Sprite(ClassHandler.nextID(index), new File("Test//green_01.png"));
 		Tile grassTile01 = new Tile(ClassHandler.nextID(index), grass01);
