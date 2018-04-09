@@ -1,7 +1,5 @@
 package asgardengine.utility.math;
 
-import java.util.HashMap;
-
 /**
  * The Trigonometry class provides basic trigonometrical functionality.
  * 
@@ -113,8 +111,8 @@ public class Trigonometry {
         }
     }
 	
-	public static double tan() {
-		
-	}
+//	public static double tan() {
+//		
+//	}
 
 }

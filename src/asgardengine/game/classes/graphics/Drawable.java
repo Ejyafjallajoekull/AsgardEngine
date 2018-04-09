@@ -21,6 +21,14 @@ public interface Drawable {
 	 */
 	public BufferedImage toBufferedImage();
 	
+	/**
+	 * Returns a resized version of the input image.
+	 * 
+	 * @param source - the input image
+	 * @param width - the output width
+	 * @param heigth - the output height
+	 * @return a resized version of the input
+	 */
 	public static BufferedImage resize(BufferedImage source, int width, int heigth) {
 		if (source != null) {
 			BufferedImage resized = new BufferedImage(width, heigth, source.getType());
@@ -34,6 +42,13 @@ public interface Drawable {
 		}
 	}
 	
+	/**
+	 * Returns a rotated version of the input image.
+	 * 
+	 * @param source - the input image
+	 * @param radians - the output angle
+	 * @return a rotated version of the input
+	 */
 	public static BufferedImage rotate(BufferedImage source, double radians) {
 		if (source != null) {
 			int max = (int) Math.ceil(Math.sqrt(Math.pow(source.getWidth(), 2.0d) + Math.pow(source.getHeight(), 2.0d)));

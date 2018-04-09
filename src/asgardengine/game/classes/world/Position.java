@@ -316,11 +316,11 @@ public class Position {
 	 * either in degrees or radians.
 	 * 
 	 * @param vector - the Position vector to calculate the angle against
-	 * @param degrees - true to return the angle in degrees, false to return the angle in radians
+	 * @param radians - true to return the angle in radians, false to return the angle in degrees
 	 * @return the angle between the Position vectors as double
 	 */
-	public double angle(Position vector, boolean degrees) {
-		return Position.angle(this, vector, degrees);
+	public double angle(Position vector, boolean radians) {
+		return Position.angle(this, vector, radians);
 	}
 	
 	/**
