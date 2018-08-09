@@ -2,9 +2,8 @@ package asgard.engine.asgardengine.game.classes.world.placetree;
 
 import java.util.HashSet;
 
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.utility.quadtree.AsgardRootNode;
-import asgardengine.utility.quadtree.QuadNode;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.utility.quadtree.AsgardRootNode;
 
 /**
  * The PlaceTreeCell class represents a single cell of a PlaceTree containing GameEntities.

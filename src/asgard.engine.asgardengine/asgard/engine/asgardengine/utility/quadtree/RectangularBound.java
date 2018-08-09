@@ -3,8 +3,8 @@ package asgard.engine.asgardengine.utility.quadtree;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import asgardengine.game.classes.world.Position;
-import asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
 
 /**
  * The RectangularBound class represents a rectangle with 

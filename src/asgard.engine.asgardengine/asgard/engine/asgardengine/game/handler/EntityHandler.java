@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.game.handler;
 
 import java.util.HashMap;
 
-import asgardengine.game.entities.EntityID;
-import asgardengine.game.entities.GameEntity;
+import asgard.engine.asgardengine.game.entities.EntityID;
+import asgard.engine.asgardengine.game.entities.GameEntity;
 
 /**
  * The EntityHandler class provides basic data tracking and handling capabilities. <br>

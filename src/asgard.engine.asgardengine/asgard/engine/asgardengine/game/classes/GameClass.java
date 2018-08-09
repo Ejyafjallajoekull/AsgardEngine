@@ -1,6 +1,6 @@
 package asgard.engine.asgardengine.game.classes;
 
-import asgardengine.game.handler.ClassHandler;
+import asgard.engine.asgardengine.game.handler.ClassHandler;
 
 /**
  * The abstract GameClass class specifies the basic behaviour of all entity types

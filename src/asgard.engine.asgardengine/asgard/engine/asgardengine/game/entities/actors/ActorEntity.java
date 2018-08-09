@@ -5,21 +5,21 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
-import asgardengine.game.classes.actors.Actor;
-import asgardengine.game.classes.graphics.Animation;
-import asgardengine.game.classes.graphics.DirectionalAnimation;
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.world.Place;
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
-import asgardengine.game.classes.world.Rotation1D;
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
-import asgardengine.game.entities.EntityID;
-import asgardengine.game.entities.GameEntity;
-import asgardengine.game.entities.graphics.AnimationEntity;
-import asgardengine.game.handler.EntityHandler;
-import asgardengine.rendering.RenderPanel;
-import asgardengine.utility.quadtree.RectangularBound;
+import asgard.engine.asgardengine.game.classes.actors.Actor;
+import asgard.engine.asgardengine.game.classes.graphics.Animation;
+import asgard.engine.asgardengine.game.classes.graphics.DirectionalAnimation;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.world.Place;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.game.entities.EntityID;
+import asgard.engine.asgardengine.game.entities.GameEntity;
+import asgard.engine.asgardengine.game.entities.graphics.AnimationEntity;
+import asgard.engine.asgardengine.game.handler.EntityHandler;
+import asgard.engine.asgardengine.rendering.RenderPanel;
+import asgard.engine.asgardengine.utility.quadtree.RectangularBound;
 
 public class ActorEntity extends GameEntity implements Drawable, Placeable {
 	

@@ -1,6 +1,6 @@
 package asgard.engine.asgardengine.game.classes.scripts;
 
-import asgardengine.game.entities.graphics.AnimationEntity;
+import asgard.engine.asgardengine.game.entities.graphics.AnimationEntity;
 
 /**
  * The AnimationScript class provides access to all relevant events and functions for AnimationEntitys.

@@ -2,11 +2,11 @@ package asgard.engine.asgardengine.game.classes.world;
 
 import java.awt.image.BufferedImage;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.graphics.Animation;
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.graphics.Sprite;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.graphics.Animation;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.graphics.Sprite;
 
 /**
  * The Tile class represents basic objects, which form a world map.

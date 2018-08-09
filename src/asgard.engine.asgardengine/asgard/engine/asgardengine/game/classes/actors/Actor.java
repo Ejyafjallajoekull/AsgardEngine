@@ -3,13 +3,13 @@ package asgard.engine.asgardengine.game.classes.actors;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.graphics.Animation;
-import asgardengine.game.classes.graphics.DirectionalAnimation;
-import asgardengine.game.classes.graphics.DirectionalSprite;
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.graphics.Sprite;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.graphics.Animation;
+import asgard.engine.asgardengine.game.classes.graphics.DirectionalAnimation;
+import asgard.engine.asgardengine.game.classes.graphics.DirectionalSprite;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.graphics.Sprite;
 
 public class Actor extends GameClass implements Drawable {
 

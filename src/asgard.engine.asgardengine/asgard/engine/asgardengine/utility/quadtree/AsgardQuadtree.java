@@ -1,11 +1,9 @@
 package asgard.engine.asgardengine.utility.quadtree;
 
-import java.util.ArrayList;
-
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
-import asgardengine.game.handler.Updatable;
-import asgardengine.game.handler.UpdateScheduler;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.game.handler.Updatable;
+import asgard.engine.asgardengine.game.handler.UpdateScheduler;
 
 /**
  * The AsgardQuadtree class provides a Quadtree implementation optimised for dynamic 

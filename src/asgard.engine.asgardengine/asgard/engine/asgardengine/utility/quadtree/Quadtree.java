@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.utility.quadtree;
 
 import java.util.ArrayList;
 
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
 
 /**
  * The Quadtree class creates a two-dimensional proximity tree for Placeable objects.

@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.game.classes;
 
 import java.util.Arrays;
 
-import asgardengine.utility.BaseID;
-import asgardengine.utility.binary.ByteUtilities;
+import asgard.engine.asgardengine.utility.BaseID;
+import asgard.engine.asgardengine.utility.binary.ByteUtilities;
 
 public class ClassID extends BaseID{
 	// a class representing a hexadecimal unique identifier for each GameClass record

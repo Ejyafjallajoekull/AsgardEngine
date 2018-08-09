@@ -2,7 +2,7 @@ package asgard.engine.asgardengine.utility.quadtree;
 
 import java.util.Dictionary;
 
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
 
 /**
  * The AsgardRootNode class holds cells, manages cell updates and passes objects 

@@ -2,9 +2,9 @@ package asgard.engine.asgardengine.game.classes.graphics;
 
 import java.util.Arrays;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
 
 /**
  * The DirectionalAnimation class holds four different animation variants of the same entity. <br>
@@ -16,7 +16,7 @@ import asgardengine.game.classes.world.Rotation1D;
 public class DirectionalAnimation extends GameClass {
 
 	/**
-	 * The unique type identifier of this class.
+	 * The usnique type identifier of this class.
 	 */
 	public static final byte[] TYPE = {0, 6};
 	

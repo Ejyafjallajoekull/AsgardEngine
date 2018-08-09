@@ -3,14 +3,14 @@ package asgard.engine.asgardengine.game.handler;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import asgardengine.game.classes.world.Place;
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
-import asgardengine.game.entities.world.PlaceEntity;
-import asgardengine.rendering.RenderPanel;
-import asgardengine.utility.quadtree.Quadtree;
-import asgardengine.utility.quadtree.RectangularBound;
+import asgard.engine.asgardengine.game.classes.world.Place;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.game.entities.world.PlaceEntity;
+import asgard.engine.asgardengine.rendering.RenderPanel;
+import asgard.engine.asgardengine.utility.quadtree.Quadtree;
+import asgard.engine.asgardengine.utility.quadtree.RectangularBound;
 
 /**
  * The PlaceHandler class manages the Place the player actor is currently in and all surrounding places loaded. <br>

@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.game.classes.world.placetree;
 
 import java.util.HashMap;
 
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
 
 /**
  * The PlaceTree class represents an dynamic, three dimensional tree, which is organised

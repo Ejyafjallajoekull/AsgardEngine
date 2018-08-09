@@ -3,8 +3,8 @@ package asgard.engine.asgardengine.utility.quadtree;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
 
 /**
  * The QuadNode class represents a node of a QuadTree.

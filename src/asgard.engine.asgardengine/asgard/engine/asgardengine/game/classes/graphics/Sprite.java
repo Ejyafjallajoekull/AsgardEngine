@@ -10,10 +10,10 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.utility.binary.ByteUtilities;
-import asgardengine.utility.logging.LoggingHandler;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.utility.binary.ByteUtilities;
+import central.logging.functionality.LoggingHandler;
 
 /**
  * A Sprite class represents one distinct image file and provides graphical access to it by

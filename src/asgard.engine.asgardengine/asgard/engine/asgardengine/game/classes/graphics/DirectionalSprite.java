@@ -2,11 +2,11 @@ package asgard.engine.asgardengine.game.classes.graphics;
 
 import java.awt.image.BufferedImage;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.world.Rotation1D;
-import asgardengine.utility.binary.ByteUtilities;
-import asgardengine.utility.logging.LoggingHandler;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.utility.binary.ByteUtilities;
+import central.logging.functionality.LoggingHandler;
 
 /**
  * The DirectionalSprite class holds four different sprite variants of the same entity. <br>

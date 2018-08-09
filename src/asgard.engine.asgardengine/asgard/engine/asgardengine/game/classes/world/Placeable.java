@@ -1,9 +1,8 @@
 package asgard.engine.asgardengine.game.classes.world;
 
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
-import asgardengine.game.entities.world.PlaceEntity;
-import asgardengine.utility.quadtree.RectangularBound;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.utility.quadtree.RectangularBound;
 
 /**
  * The Placeable interface provides access to basic 2D(/3D) world placement behaviour.

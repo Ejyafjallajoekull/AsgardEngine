@@ -2,13 +2,13 @@ package asgard.engine.asgardengine.game.entities.graphics;
 
 import java.awt.image.BufferedImage;
 
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.graphics.Animation;
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.graphics.Sprite;
-import asgardengine.game.classes.scripts.AnimationScript;
-import asgardengine.game.entities.EntityID;
-import asgardengine.game.entities.GameEntity;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.graphics.Animation;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.graphics.Sprite;
+import asgard.engine.asgardengine.game.classes.scripts.AnimationScript;
+import asgard.engine.asgardengine.game.entities.EntityID;
+import asgard.engine.asgardengine.game.entities.GameEntity;
 
 public class AnimationEntity extends GameEntity implements Drawable {
 	

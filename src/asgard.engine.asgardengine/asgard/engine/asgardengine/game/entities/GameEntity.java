@@ -1,7 +1,7 @@
 package asgard.engine.asgardengine.game.entities;
 
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.handler.EntityHandler;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.handler.EntityHandler;
 
 public abstract class GameEntity {
 	// a instance of a GameClass

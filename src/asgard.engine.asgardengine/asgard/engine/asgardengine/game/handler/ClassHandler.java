@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.game.handler;
 
 import java.util.HashMap;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
 
 /**
  * The ClassHandler class provides basic data tracking and handling capabilities. <br>

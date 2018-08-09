@@ -4,11 +4,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.scripts.AnimationScript;
-import asgardengine.utility.binary.ByteUtilities;
-import asgardengine.utility.logging.LoggingHandler;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.scripts.AnimationScript;
+import asgard.engine.asgardengine.utility.binary.ByteUtilities;
+import central.logging.functionality.LoggingHandler;
 
 public class Animation extends GameClass {
 	// just a blueprint, the actual playing methods are implemented via an instance class

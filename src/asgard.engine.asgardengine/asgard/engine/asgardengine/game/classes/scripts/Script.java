@@ -1,6 +1,6 @@
 package asgard.engine.asgardengine.game.classes.scripts;
 
-import asgardengine.game.entities.GameEntity;
+import asgard.engine.asgardengine.game.entities.GameEntity;
 
 /**
  * The Script class provides support for different events performed by different GameEntitys.

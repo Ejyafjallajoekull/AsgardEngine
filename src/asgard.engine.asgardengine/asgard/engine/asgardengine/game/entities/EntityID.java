@@ -1,6 +1,6 @@
 package asgard.engine.asgardengine.game.entities;
 
-import asgardengine.utility.BaseID;
+import asgard.engine.asgardengine.utility.BaseID;
 
 public class EntityID extends BaseID {
 

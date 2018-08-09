@@ -1,9 +1,9 @@
 package asgard.engine.asgardengine.game.classes.world;
 
-import asgardengine.game.classes.ClassID;
-import asgardengine.game.classes.GameClass;
-import asgardengine.game.classes.graphics.Sprite;
-import asgardengine.game.classes.world.placetree.PlaceTree;
+import asgard.engine.asgardengine.game.classes.ClassID;
+import asgard.engine.asgardengine.game.classes.GameClass;
+import asgard.engine.asgardengine.game.classes.graphics.Sprite;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTree;
 
 /**
  * The Place class contains Placeables to display by the engine.

@@ -3,9 +3,9 @@ package asgard.engine.asgardengine.game.handler;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import asgardengine.game.classes.world.Rotation1D;
-import asgardengine.game.entities.actors.ActorEntity;
-import asgardengine.rendering.RenderPanel;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.game.entities.actors.ActorEntity;
+import asgard.engine.asgardengine.rendering.RenderPanel;
 
 public class PlayerControlHandler implements KeyListener{
 

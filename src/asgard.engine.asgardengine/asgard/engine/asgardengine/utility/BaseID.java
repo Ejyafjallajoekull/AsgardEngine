@@ -2,8 +2,8 @@ package asgard.engine.asgardengine.utility;
 
 import java.util.Arrays;
 
-import asgardengine.utility.binary.ByteUtilities;
-import asgardengine.utility.binary.Hexadecimal;
+import asgard.engine.asgardengine.utility.binary.ByteUtilities;
+import asgard.engine.asgardengine.utility.binary.Hexadecimal;
 
 /**
  * The BaseID class represents an binary identifier. 
@@ -20,7 +20,7 @@ public abstract class BaseID {
 	 * The FILLER constant is a byte value to fill the ID byte array if the initially 
 	 * specified array is to short to meet the length requirement.
 	 */
-	public static final byte FILLER = (byte) 0; // the byte to fill arrays, which are too short
+	public static final byte FILLER = 0; // the byte to fill arrays, which are too short
 	
 	/**
 	 * Create a BaseID of the specified length from the given byte array.
@@ -99,7 +99,7 @@ public abstract class BaseID {
 	}
 	
 	@Override
-	public int hashCode() { // must be hashable for hashmap generation to easily find objects associated with an ID
+	public int hashCode() { // must be hastable for hashmap generation to easily find objects associated with an ID
 		return Arrays.hashCode(this.toByte());
 	}
 

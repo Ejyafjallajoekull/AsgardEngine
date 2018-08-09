@@ -4,20 +4,20 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.Timer;
 
-import asgardengine.game.classes.graphics.Drawable;
-import asgardengine.game.classes.graphics.Sprite;
-import asgardengine.game.classes.world.Place;
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.classes.world.Position;
-import asgardengine.game.classes.world.Rotation1D;
-import asgardengine.game.classes.world.Tile;
-import asgardengine.game.classes.world.placetree.PlaceTreeCell;
-import asgardengine.game.entities.EntityID;
-import asgardengine.game.entities.GameEntity;
-import asgardengine.game.entities.graphics.AnimationEntity;
-import asgardengine.game.handler.EntityHandler;
-import asgardengine.utility.logging.LoggingHandler;
-import asgardengine.utility.quadtree.RectangularBound;
+import asgard.engine.asgardengine.game.classes.graphics.Drawable;
+import asgard.engine.asgardengine.game.classes.graphics.Sprite;
+import asgard.engine.asgardengine.game.classes.world.Place;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.classes.world.Position;
+import asgard.engine.asgardengine.game.classes.world.Rotation1D;
+import asgard.engine.asgardengine.game.classes.world.Tile;
+import asgard.engine.asgardengine.game.classes.world.placetree.PlaceTreeCell;
+import asgard.engine.asgardengine.game.entities.EntityID;
+import asgard.engine.asgardengine.game.entities.GameEntity;
+import asgard.engine.asgardengine.game.entities.graphics.AnimationEntity;
+import asgard.engine.asgardengine.game.handler.EntityHandler;
+import asgard.engine.asgardengine.utility.quadtree.RectangularBound;
+import central.logging.functionality.LoggingHandler;
 
 public class TileEntity extends GameEntity implements Drawable, Placeable {
 

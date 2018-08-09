@@ -27,6 +27,7 @@ module asgard.engine.asgardengine {
 	exports asgard.engine.asgardengine.utility.quadtree;
 	
 	requires java.base;
+	requires java.desktop;
 	requires central.logging;
 	
 }

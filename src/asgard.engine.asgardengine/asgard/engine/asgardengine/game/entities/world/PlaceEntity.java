@@ -2,11 +2,10 @@ package asgard.engine.asgardengine.game.entities.world;
 
 import java.util.HashSet;
 
-import asgardengine.game.classes.world.Place;
-import asgardengine.game.classes.world.Placeable;
-import asgardengine.game.entities.EntityID;
-import asgardengine.game.entities.GameEntity;
-import asgardengine.utility.quadtree.Quadtree;
+import asgard.engine.asgardengine.game.classes.world.Place;
+import asgard.engine.asgardengine.game.classes.world.Placeable;
+import asgard.engine.asgardengine.game.entities.EntityID;
+import asgard.engine.asgardengine.game.entities.GameEntity;
 
 /**
  * The PlaceEntity class is an instance class for Places. It keeps track of Placeables, 
