@@ -39,7 +39,7 @@ public abstract class BaseID {
 	}
 
 	/**
-	 * Convert this ID to its' binary representation.
+	 * Convert this ID to its binary representation.
 	 * 
 	 * @return the binary representation of this ID as byte array
 	 */
