@@ -6,7 +6,8 @@
  */
 module asgard.engine.test {
 
-//	exports asgard.engine.test;
+	exports asgard.engine.test;
+	exports asgard.engine.test.utility.binary;
 	
 	requires asgard.engine.asgardengine;
 	requires java.base;

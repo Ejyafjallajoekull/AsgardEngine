@@ -4,20 +4,46 @@ import java.util.Arrays;
 
 public class Hexadecimal {
 
-	private final static char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	private final static char[] HEX_ARRAY = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	private String hex = null; // the hexadecimal representation of the given byte array
-	
-	// TODO: finish this class' implementation and add JavaDoc
-	
+		
+	/**
+	 * Create a hexadecimal number from an array of bytes.
+	 * 
+	 * @param bytes - the byte array to represent as hexadecimal number
+	 */
 	public Hexadecimal(byte[] bytes) {
-		this.hex = toHex(bytes);
+		this.hex = Hexadecimal.toHex(bytes);
 	}
 	
+	/**
+	 * Create a hexadecimal number form a single byte.
+	 * 
+	 * @param singleByte - the byte to represent as hexadecimal number
+	 */
 	public Hexadecimal(byte singleByte) {
-		this.hex = toHex(singleByte);
+		this.hex = Hexadecimal.toHex(singleByte);
 	}
 	
-	// convert this hexadecimal to its' corresponding byte representation
+	/**
+	 * Create a hexadecimal number form a single byte.
+	 * 
+	 * @param singleByte - the byte to represent as hexadecimal number
+	 */
+	public Hexadecimal(Byte singleByte) {
+		if (singleByte != null) {
+			this.hex = Hexadecimal.toHex(singleByte.byteValue());
+		} else {
+			this.hex = null;
+		}
+	}
+	
+	// convert this hexadecimal to its corresponding byte representation
+	/**
+	 * Get the byte representation of this hexadecimal number.
+	 * 
+	 * @return this hexadecimal number as byte array
+	 */
 	public byte[] toBytes() {
 		if (this.hex != null) {
 		    int len = this.hex.length();
@@ -45,14 +71,19 @@ public class Hexadecimal {
 		}
 	}
 	
-	// convert any byte array to its' hexadecimal representation
+	/**
+	 * Convert the specified byte array to its hexadecimal representation.
+	 * 
+	 * @param bytes - the byte array to convert
+	 * @return the hexadecimal representation of the specified byte sequence
+	 */
 	public static String toHex(byte[] bytes) {
 		if (bytes != null) {
 			 char[] hexChars = new char[bytes.length * 2];
-			    for ( int i = 0; i < bytes.length; i++ ) {
+			    for (int i = 0; i < bytes.length; i++) {
 			        int v = bytes[i] & 0xFF;
-			        hexChars[i * 2] = hexArray[v >>> 4];
-			        hexChars[i * 2 + 1] = hexArray[v & 0x0F];
+			        hexChars[i * 2] = Hexadecimal.HEX_ARRAY[v >>> 4];
+			        hexChars[i * 2 + 1] = Hexadecimal.HEX_ARRAY[v & 0x0F];
 			    }
 			    return new String(hexChars);
 		} else {
@@ -60,33 +91,63 @@ public class Hexadecimal {
 		}
 	}
 	
-	// overload for a single byte
+	/**
+	 * Convert the specified byte to its hexadecimal representation.
+	 * 
+	 * @param singleByte - the byte to convert
+	 * @return the hexadecimal representation of the specified byte
+	 */
 	public static String toHex(byte singleByte) {
-		byte[] b = new byte[1];
-		b[0] = singleByte;
-		return toHex(b);
+		return Hexadecimal.toHex(new byte[] {singleByte});
+	}
+	
+	/**
+	 * Convert the specified byte to its hexadecimal representation.
+	 * Returns null if the specified byte is null.
+	 * 
+	 * @param singleByte - the byte to convert
+	 * @return the hexadecimal representation of the specified byte
+	 */
+	public static String toHex(Byte singleByte) {
+		if (singleByte != null) {
+			return Hexadecimal.toHex(new byte[] {singleByte.byteValue()});
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
 	public String toString() {
-		return this.hex.toString();
+		return this.hex;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.hex == null) ? 0 : this.hex.hashCode());
+		return result;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null) {
-			if (obj instanceof byte[]) { // can equal a byte array
-				return Arrays.equals((byte[]) obj, this.toBytes());
-			} else if (obj instanceof Byte[]) { // can equal a Byte array
-				return Arrays.equals((Byte[]) obj, this.toBytesWrap());
-			} else if (obj instanceof Hexadecimal) { // can equal another hexadecimal
-				if (this.toString() != null && obj.toString() != null) {
-					return this.toString().equals(obj.toString());
-				} else if (this.toString() == null && obj.toString() == null) {
-					return true;
-				}
-			} else if (obj instanceof Byte && this.hex.length() == 2) { // can equal a single byte
-				return obj.equals(this.toBytes()[0]);
+			if (this.hex == null && ((Hexadecimal) obj).hex == null) {
+				return true;
+			} else if (this.hex != null) {
+				if (obj instanceof byte[]) { // can equal a byte array
+					return Arrays.equals((byte[]) obj, this.toBytes());
+				} else if (obj instanceof Byte[]) { // can equal a Byte array
+					return Arrays.equals((Byte[]) obj, this.toBytesWrap());
+				} else if (obj instanceof Hexadecimal) { // can equal another hexadecimal
+					if (this.toString() != null && obj.toString() != null) {
+						return this.toString().equals(obj.toString());
+					} else if (this.toString() == null && obj.toString() == null) {
+						return true;
+					}
+				} else if (obj instanceof Byte && this.hex.length() == 2) { // can equal a single byte
+					return obj.equals(this.toBytes()[0]);
+				}	
 			}
 		}
 		return false;
