@@ -2,6 +2,12 @@ package asgard.engine.asgardengine.utility.binary;
 
 import java.util.Arrays;
 
+/**
+ * The Hexadecimal class represents the hexadecimal number representation of a byte sequence.
+ * 
+ * @author Planters
+ *
+ */
 public class Hexadecimal {
 
 	private final static char[] HEX_ARRAY = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -116,6 +122,11 @@ public class Hexadecimal {
 		}
 	}
 	
+	/**
+	 * Get the string representation of this hexadecimal number.
+	 * 
+	 * @return the Hexadecimal as string
+	 */
 	@Override
 	public String toString() {
 		return this.hex;

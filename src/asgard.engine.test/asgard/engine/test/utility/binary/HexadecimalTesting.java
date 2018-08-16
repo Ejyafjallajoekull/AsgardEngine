@@ -21,11 +21,9 @@ public class HexadecimalTesting implements TestSubject {
 	public void runAllTests() throws TestFailureException {
 		HexadecimalTesting.testConstructors();
 		HexadecimalTesting.testHexRepresentation();
+		HexadecimalTesting.testHexRepresentationStatic();
 		HexadecimalTesting.testByteRepresentation();
 		HexadecimalTesting.testEquals();
-//		HexadecimalTesting.
-//		HexadecimalTesting.
-//		HexadecimalTesting.
 	}
 	
 	/**
@@ -107,6 +105,55 @@ public class HexadecimalTesting implements TestSubject {
 			TestSubject.assertTestCondition(randomHex.toString().equals(hexString), String.format("The byte "
 					+ "sequence %s should have the hexadecimal representation %s, but has %s.",
 					Arrays.toString(randomBytes), hexString, randomHex));
+			if (randomBytes.length == 1) {
+				Hexadecimal randomHexByte = new Hexadecimal(randomBytes[0]);
+				TestSubject.assertTestCondition(randomHexByte.toString().equals(hexString), String.format("The byte "
+						+ "sequence %s should have the hexadecimal representation %s, but has %s.",
+						Arrays.toString(randomBytes), hexString, randomHex));
+				randomHexByte = new Hexadecimal(Byte.valueOf(randomBytes[0]));
+				TestSubject.assertTestCondition(randomHexByte.toString().equals(hexString), String.format("The byte "
+						+ "sequence %s should have the hexadecimal representation %s, but has %s.",
+						Arrays.toString(randomBytes), hexString, randomHex));
+			}
+		}
+	}
+	
+	/**
+	 * Tests if bytes get displayed as hexadecimal numbers correctly when using the static method.
+	 * 
+	 * @throws TestFailureException the test did fail
+	 */
+	private static void testHexRepresentationStatic() throws TestFailureException {
+		for (int i = 0; i < 10000; i++) {
+			// test null
+			String nullHex = Hexadecimal.toHex((byte[]) null);
+			TestSubject.assertTestCondition(nullHex == null, String.format("%s should equal %s.",
+					nullHex, null));
+			// test random values
+			byte[] randomBytes = new byte[HexadecimalTesting.RANDOM.nextInt(400)];
+			HexadecimalTesting.RANDOM.nextBytes(randomBytes);
+			String hexString = "";
+			for (byte b : randomBytes) {
+				String intString = Integer.toHexString((int) b).toUpperCase();
+				while (intString.length() < 2) {
+					intString = "0" + intString;
+				}
+				hexString += intString.substring(intString.length()-2, intString.length());
+			}
+			String randomHex = Hexadecimal.toHex(randomBytes);
+			TestSubject.assertTestCondition(randomHex.equals(hexString), String.format("The byte "
+					+ "sequence %s should have the hexadecimal representation %s, but has %s.",
+					Arrays.toString(randomBytes), hexString, randomHex));
+			if (randomBytes.length == 1) {
+				String randomHexByte = Hexadecimal.toHex(randomBytes[0]);
+				TestSubject.assertTestCondition(randomHexByte.equals(hexString), String.format("The byte "
+						+ "sequence %s should have the hexadecimal representation %s, but has %s.",
+						Arrays.toString(randomBytes), hexString, randomHex));
+				randomHexByte = Hexadecimal.toHex(Byte.valueOf(randomBytes[0]));
+				TestSubject.assertTestCondition(randomHexByte.equals(hexString), String.format("The byte "
+						+ "sequence %s should have the hexadecimal representation %s, but has %s.",
+						Arrays.toString(randomBytes), hexString, randomHex));
+			}
 		}
 	}
 	
@@ -136,6 +183,7 @@ public class HexadecimalTesting implements TestSubject {
 	 * 
 	 * @throws TestFailureException the test did fail
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	private static void testEquals() throws TestFailureException {
 		for (int i = 0; i < 10000; i++) {
 			// test null
